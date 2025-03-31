@@ -4,7 +4,7 @@
 body {
     margin: 0;
     font-family: "IBM Plex Sans", sans-serif;
-    background-image: url('img/bgnubes.png'); 
+    background-image: url("../images/bgnubes.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,7 +19,7 @@ body {
 }
 
 .login-container {
-  background-image: url('img/bgazul.jpg');
+  background-image: url('../images/bgazul.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

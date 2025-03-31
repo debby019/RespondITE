@@ -4,7 +4,7 @@
 body {
   margin: 0;
   font-family: 'IBM Plex Sans', sans-serif; 
-  background-image: url('/assets/fondo-registro.png');  
+  background-image: url("../images/bgnubes.png"); 
   background-size: cover;
   background-position: center; 
   background-repeat: no-repeat; 
@@ -20,7 +20,7 @@ body {
 /* Container del registro */
 .register-container {
   background-color: rgba(18, 18, 82, 0.9); 
-  background-image: url('img/bgazul.jpg'); 
+  background-image: url('../images/bgazul.jpg');
   background-size: cover; 
   background-position: center; 
   background-repeat: no-repeat; 
