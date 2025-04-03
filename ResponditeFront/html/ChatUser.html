@@ -16,16 +16,16 @@
   
     <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69) ;" >
       <div  class="offcanvas-header">
-      <h4 class="offcanvas-title">RESPONDITE</h4>
+      <h4 class="offcanvas-title text-center">RESPONDITE</h4>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body">
-        <img src="/images/logo.jpg" class="rounded-circle mb-3" style="width: 60px; height:60px; object-fit:cover;">
-      <button class="btn btn-dark w-100 mb-2">Nuevo chat</button>
+        <img src="../images/logo.jpg" class="rounded-circle mb-3" style="width: 60px; height:60px; object-fit:cover;">
+      <button class="btn btn-dark w-100 mb-2" @click="nuevoChat">Nuevo chat</button>
       <button class="btn btn-dark w-100 mb-2">Historial de chats</button>
       
       <div class="position-absolute bottom-0 start-0 end-0 p-3">
-      <button class="btn btn-outline-light w-100">Cerrar sesion</button>
+      <button class="btn btn-outline-light w-100" @click="cerrarSesion">Cerrar sesion</button>
       </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
 
   <div class="w-100 bg-light py-3">
     <div class="d-flex justify-content-center">
-      <img src="/images/logo.jpg" alt="RespondITE Logo" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+      <img src="../images/logo.jpg" alt="RespondITE Logo" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
     </div>
   </div>
 
@@ -46,7 +46,7 @@
       <div class="d-flex flex-column gap-3 px-4 pb-5">
         <div v-for="(msg, index) in mensajes" :key="index" class="d-flex" :class="msg.tipo === 'user' ? 'justify-content-end' : 'align-items-center'">
           <template v-if="msg.tipo === 'ia'">
-            <img src="/images/logo.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+            <img src="../images/logo.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
             <div class="p-3 rounded bg-light">{{ msg.texto }}</div>
           </template>
           <template v-else>
@@ -90,9 +90,20 @@
               this.mensajes.push({ texto: 'si', tipo: 'ia' });
             }, 500);
           }
+        },
+          nuevoChat() {
+            this.mensajes = [
+            {texto: 'Hola, este es un nuevo chat', tipo: 'ia'}
+            ];
+            this.nuevoMensaje = '';
+          },
+          cerrarSesion() {
+            window.location = "index.html";
+          }
         }
+        
       }
-    }).mount('#app');
+    ).mount('#app');
   </script>
 
 </body>
