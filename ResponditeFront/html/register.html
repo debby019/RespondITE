@@ -27,5 +27,28 @@
     </form>
     
   </div>
+  <script>
+      document.querySelector("form").addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const nombre = document.querySelector("#nombre").value;
+          const email = document.querySelector("#email").value;
+          const password = document.querySelector("#password").value;
+
+          const res = await fetch("http://127.0.0.1:8000/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: new URLSearchParams({ nombre, email, password }),
+          });
+
+          const data = await res.json();
+          if (res.ok) {
+              alert("Registered successfully.");
+              window.location.href = "index.html";
+          } else {
+              alert(data.detail || "Something went wrong.");
+          }
+      });
+    </script>
 </body>
 </html>
