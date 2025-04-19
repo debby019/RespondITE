@@ -9,7 +9,7 @@
 </head>
 <body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
 
-  <div id="app">
+  <div id="chat-container">
     <button class = "btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
       ☰
     </button>
@@ -123,10 +123,21 @@
               console.error("Error sending message:", err);
             });
           },
-          nuevoChat() {
-            this.mensajes = [{texto: "Hola, ¿en qué puedo ayudarte hoy?", tipo: "ia"}];
+          async nuevoChat() {
+            const res = await fetch("http://127.0.0.1:8000/create-chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ usuario_id: this.usuario_id })
+            });
+
+            const data = await res.json();
+            this.chat_id = data.chat_id;
+            localStorage.setItem("chat_id", data.chat_id);
+
+            this.mensajes = [{ texto: "Hola, ¿en qué puedo ayudarte hoy?", tipo: "ia" }];
             this.nuevoMensaje = '';
           },
+
           cerrarSesion() {
             localStorage.clear();
             window.location = "index.html";
