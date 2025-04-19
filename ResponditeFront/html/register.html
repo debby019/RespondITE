@@ -13,42 +13,54 @@
   <div class="register-container">
     <h1 class="register-title">CREA UNA NUEVA CUENTA</h1>
   
-    <form class="register-form" action="registro.php" method="POST">
+    <form class="register-form" method="POST">
       <div class="form-group">
-        <input type="text" class="register-input" name="nombre_completo" placeholder="Nombre Completo" required>
-        <input type="email" class="register-input" name="correo" placeholder="Correo Electronico" required>
+        <input type="text" id="nombre" class="register-input" name="nombre_completo" placeholder="Nombre Completo" required>
+        <input type="email" id="email" class="register-input" name="correo" placeholder="Correo Electrónico" required>
       </div>
       <div class="form-group">
-        <input type="text" class="register-input" name="usuario" placeholder="Usuario" required>
-        <input type="password" class="register-input" name="contrasena" placeholder="Contraseña" required>
+        <input type="password" id="password" class="register-input" name="contrasena" placeholder="Contraseña" required>
       </div>
       
-      <button type="submit" class="register-button">Registrarse</button>
+      <button type="button" id="registro-btn" class="register-button">Registrarse</button>
     </form>
     
   </div>
   <script>
-      document.querySelector("form").addEventListener("submit", async (e) => {
-          e.preventDefault();
-
-          const nombre = document.querySelector("#nombre").value;
-          const email = document.querySelector("#email").value;
-          const password = document.querySelector("#password").value;
-
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelector("#registro-btn").addEventListener("click", async () => {
+        console.log("¡Botón de registro presionado!");
+  
+        const nombre = document.querySelector("#nombre").value;
+        const email = document.querySelector("#email").value;
+        const password = document.querySelector("#password").value;
+  
+        try {
           const res = await fetch("http://127.0.0.1:8000/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: new URLSearchParams({ nombre, email, password }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, email, password }),
           });
-
+  
           const data = await res.json();
+          console.log(data);
+  
           if (res.ok) {
-              alert("Registered successfully.");
-              window.location.href = "index.html";
+            alert("Registro exitoso.");
+            window.location.href = "index.html";
           } else {
-              alert(data.detail || "Something went wrong.");
+            alert(data.detail || "Ocurrió un error.");
           }
+        } catch (err) {
+          console.error("Error en el registro:", err);
+          alert("Error al conectar con el servidor.");
+        }
       });
-    </script>
+    });
+  </script>
+  
+  
+  
+  
 </body>
 </html>
