@@ -13,21 +13,21 @@
   <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="login-container bg-primary p-4 rounded shadow-lg w-100">
       <h1 class="text-center text-white mb-4">BIENVENIDO</h1>
-      <form action="login.php" method="POST">
+      <form>
       
         <div class="form-group mb-4 text-center">
-          <label for="usuario" class="text-white">Usuario</label>
-          <input type="text" class="form-control mx-auto" style="max-width: 300px;" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
+          <label for="usuario" class="text-white">Correo</label>
+          <input type="email" class="form-control mx-auto" style="max-width: 300px;" id="email" name="email" placeholder="Ingresa tu correo electrónico" required>
         </div>
 
         
         <div class="form-group mb-4 text-center">
           <label for="contrasena" class="text-white">Contraseña</label>
-          <input type="password" class="form-control mx-auto" style="max-width: 300px;" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+          <input type="password" class="form-control mx-auto" style="max-width: 300px;" id="password" name="password" placeholder="Ingresa tu contraseña" required>
         </div>
 
     
-        <button type="submit" class="btn btn-warning w-auto mx-auto d-block mt-2" onclick="window.location.href='ChatUser.html'">
+        <button type="submit" class="btn btn-warning w-auto mx-auto d-block mt-2">
           Iniciar sesión
         </button>
 
@@ -42,33 +42,35 @@
       </form>
     </div>
   </div>
+
   <script>
-      document.querySelector("form").addEventListener("submit", async (e) => {
-          e.preventDefault();
-          try {
-            const email = document.querySelector("#email").value;
-            const password = document.querySelector("#password").value;
+    document.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        const email = document.querySelector("#email").value;
+        const password = document.querySelector("#password").value;
+  
+        const res = await fetch("http://127.0.0.1:8000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+  
+        if (!res.ok) {
+          const error = await res.json();
+          throw new Error(error.detail || "Login failed.");
+        }
+  
+        const data = await res.json();
+        localStorage.setItem("usuario_id", data.usuario_id);
+        localStorage.setItem("role", data.role);
+        localStorage.setItem("chat_id", data.chat_id);
+        window.location.href = data.role === "admin" ? "ChatAdmin.html" : "ChatUser.html";
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+  </script>
 
-            const res = await fetch("http://127.0.0.1:8000/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ email, password }),
-            });
-
-            if (!res.ok) {
-              const error = await res.json();
-              throw new Error(error.detail || "Login failed.");
-            }
-
-            const data = await res.json();
-            localStorage.setItem("usuario_id", data.usuario_id);
-            localStorage.setItem("role", data.role);
-            localStorage.setItem("chat_id", data.chat_id);
-            window.location.href = data.role === "admin" ? "ChatAdmin.html" : "ChatUser.html";
-          } catch (err) {
-            alert(err.message);
-          }
-      });
-    </script>
 </body>
 </html>
