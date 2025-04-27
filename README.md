@@ -5,14 +5,17 @@
 
 Chat IA dirigido al área de Servicios Escolares. Brinda respuestas automáticas a preguntas frecuentes de estudiantes (credenciales, constancias, etc). El sistema permite a los alumnos comunicarse de forma rápida y sencilla con Servicios Escolares, resolviendo sus dudas.
 
-## REQUISITOS INSTALACION
-### Requisitos previos:
-```
-* Antes de comenzar asegúrate de tener instalado:
+## Requisitos previos:
+Antes de comenzar asegúrate de tener instalado:
 * Python 3.10 o superior
 * pip (el gestor de paquetes de Python)
 * Un navegador web (como Chrome, Edge, etc.)
-```
+
+###PYTHON:
+
+
+
+## REQUISITOS INSTALACION
 
 
 PROCEDIMIENTO DE LA INSTALACION
