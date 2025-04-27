@@ -1,13 +1,18 @@
 # RespondITE
 
 
-DESCRIPCION
+## DESCRIPCION
 
 Chat IA dirigido al área de Servicios Escolares. Brinda respuestas automáticas a preguntas frecuentes de estudiantes (credenciales, constancias, etc). El sistema permite a los alumnos comunicarse de forma rápida y sencilla con Servicios Escolares, resolviendo sus dudas.
 
-REQUISITOS INSTALACION
-
-
+## REQUISITOS INSTALACION
+### Requisitos previos:
+```
+* Antes de comenzar asegúrate de tener instalado:
+* Python 3.10 o superior
+* pip (el gestor de paquetes de Python)
+* Un navegador web (como Chrome, Edge, etc.)
+```
 
 
 PROCEDIMIENTO DE LA INSTALACION
