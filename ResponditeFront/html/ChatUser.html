@@ -1,36 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RespondITE</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
-<body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
 
-  <div id="chat-container">
-    <button class = "btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-      ☰
-    </button>
-  
-    <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69) ;" >
-      <div  class="offcanvas-header">
+
+  <style>
+    #chat-mensajes {
+      height: calc(100vh - 250px);
+      overflow-y: auto;
+      padding: 10px;
+    }
+    #chat-input input {
+      height: 45px;
+      resize: none;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+
+<body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
+<div id="app">
+
+  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+    ☰
+  </button>
+  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33,33,69);">
+    <div class="offcanvas-header">
       <h4 class="offcanvas-title text-center">RESPONDITE</h4>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-      </div>
-      <div class="offcanvas-body">
-        <img src="../images/logo.jpg" class="rounded-circle mb-3" style="width: 60px; height:60px; object-fit:cover;">
+    </div>
+    <div class="offcanvas-body">
+      <img src="../images/logo.jpg" class="rounded-circle mb-3 d-block mx-auto" style="width: 60px; height:60px; object-fit:cover;">
       <button class="btn btn-dark w-100 mb-2" @click="nuevoChat">Nuevo chat</button>
       <button class="btn btn-dark w-100 mb-2">Historial de chats</button>
-      
       <div class="position-absolute bottom-0 start-0 end-0 p-3">
-      <button class="btn btn-outline-light w-100" @click="cerrarSesion">Cerrar sesion</button>
-      </div>
+        <button class="btn btn-outline-light w-100" @click="cerrarSesion">Cerrar sesión</button>
       </div>
     </div>
-    
-    <!-- el logo-->
+  </div>
 
   <div class="w-100 bg-light py-3">
     <div class="d-flex justify-content-center">
@@ -38,115 +50,142 @@
     </div>
   </div>
 
-  <!--chat vue -->
-  <div id="app" class="w-100 d-flex justify-content-center align-items-center" style="height: calc(100vh - 110px);">
-    <div class="w-100 h-100 position-relative">
-      <p class="text-light text-center pt-3">{{ fecha }}</p>
+  <div class="w-100 d-flex flex-column justify-content-center align-items-center" style="height: calc(100vh - 110px);">
+    <p class="text-light text-center pt-2">{{ fecha }}</p>
 
-      <div class="d-flex flex-column gap-3 px-4 pb-5">
-        <div v-for="(msg, index) in mensajes" :key="index" class="d-flex" :class="msg.tipo === 'user' ? 'justify-content-end' : 'align-items-center'">
-          <template v-if="msg.tipo === 'ia'">
-            <img src="../images/logo.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-            <div class="p-3 rounded bg-light">{{ msg.texto }}</div>
-          </template>
-          <template v-else>
-            <div class="p-3 rounded bg-primary text-white">{{ msg.texto }}</div>
-          </template>
-        </div>
-      </div>
 
-      <!-- barra de entrada de mensaje -->
-      <div class="position-absolute bottom-0 start-0 end-0 p-3 d-flex align-items-center border-top" style="background-color: #294065;">
-        <input type="text" class="form-control rounded-pill flex-grow-1" placeholder="Escribe un mensaje..." v-model="nuevoMensaje" @keyup.enter="enviarMensaje">
-        <button class="btn ms-2 text-white" style="background-color: rgb(110, 110, 168);" @click="enviarMensaje">Enviar</button>
+    <div id="chat-mensajes" class="w-100 px-4">
+      <div v-for="(msg, index) in mensajes" :key="index" class="d-flex my-2" :class="msg.tipo === 'usuario' ? 'justify-content-end' : 'align-items-center'">
+        <template v-if="msg.tipo === 'ia'">
+          <img src="../images/logo.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+          <div class="p-3 rounded bg-light" style="max-width: 70%; word-break: break-word;">{{ msg.texto }}</div>
+        </template>
+        <template v-else>
+          <div class="p-3 rounded bg-primary text-white" style="max-width: 70%; word-break: break-word;">{{ msg.texto }}</div>
+        </template>
       </div>
     </div>
+
+
+    <div id="chat-input" class="position-relative w-100 p-3 border-top" style="background-color: #294065;">
+      <div class="d-flex">
+        <input type="text" class="form-control rounded-pill me-2" placeholder="Escribe un mensaje..." v-model="nuevoMensaje" @keyup.enter="enviarMensaje">
+        <button class="btn btn-primary rounded-pill" @click="enviarMensaje">{{ enviando ? 'Enviando...' : 'Enviar' }}</button>
+      </div>
+    </div>
+
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 
-  <script>
-      const { createApp } = Vue;
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-      createApp({
-        data() {
-          return {
-            fecha: new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' }),
-            nuevoMensaje: '',
-            mensajes: [],
-            usuario_id: localStorage.getItem("usuario_id"),
-            chat_id: localStorage.getItem("chat_id")
-          }
-        },
-        methods: {
-          async cargarMensajes() {
-            try {
-              const response = await fetch(`http://127.0.0.1:8000/chat-history/${this.chat_id}`);
-              const data = await response.json();
 
-              this.mensajes = data.map(msg => ({
-                texto: msg.Mensaje,
-                tipo: msg.Remitente === 'usuario' ? 'usuario' : 'ia'
-              }));
-            } catch (error) {
-              console.error("Error al cargar mensajes:", error);
-            }
-          },
-          async enviarMensaje() {
-            if (!this.nuevoMensaje.trim()) return;
-            const payload = {
-              user_input: this.nuevoMensaje,
-              chat_id: this.chat_id,
-              tone: "neutral"
-            };
+<script>
+const { createApp, nextTick } = Vue;
 
-            fetch("http://127.0.0.1:8000/chat", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-              this.mensajes.push({
-                texto: this.nuevoMensaje,
-                tipo: "usuario"
-              });
-              this.mensajes.push({
-                texto: data.response,
-                tipo: "ia"
-              });
-              this.nuevoMensaje = '';
-            })
-            .catch(err => {
-              console.error("Error sending message:", err);
-            });
-          },
-          async nuevoChat() {
-            const res = await fetch("http://127.0.0.1:8000/create-chat", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ usuario_id: this.usuario_id })
-            });
+createApp({
+  data() {
+    return {
+      fecha: new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' }),
+      nuevoMensaje: '',
+      mensajes: [],
+      enviando: false,
+      usuario_id: localStorage.getItem("usuario_id"),
+      chat_id: localStorage.getItem("chat_id")
+    }
+  },
+  methods: {
+ 
+    async cargarMensajes() {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/chat-history/${this.chat_id}`);
+        const data = await response.json();
+        this.mensajes = data.map(msg => ({
+          texto: msg.Mensaje,
+          tipo: msg.Remitente === 'usuario' ? 'usuario' : 'ia'
+        }));
 
-            const data = await res.json();
-            this.chat_id = data.chat_id;
-            localStorage.setItem("chat_id", data.chat_id);
+        await nextTick();
+        const chatMensajes = document.getElementById("chat-mensajes");
+        chatMensajes.scrollTop = chatMensajes.scrollHeight;
 
-            this.mensajes = [{ texto: "Hola, ¿en qué puedo ayudarte hoy?", tipo: "ia" }];
-            this.nuevoMensaje = '';
-          },
+      } catch (error) {
+        console.error("Error al cargar mensajes:", error);
+      }
+    },
 
-          cerrarSesion() {
-            localStorage.clear();
-            window.location = "index.html";
-          }
-        },
-        mounted() {
-          this.cargarMensajes();
-        }
-      }).mount('#app');
-    </script>
+ 
+    async enviarMensaje() {
+      if (!this.nuevoMensaje.trim()) return;
+
+      const payload = {
+        user_input: this.nuevoMensaje,
+        chat_id: this.chat_id,
+        tone: "neutral"
+      };
+
+      try {
+        this.enviando = true;
+
+        const res = await fetch("http://127.0.0.1:8000/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+     
+        this.mensajes.push({ texto: this.nuevoMensaje, tipo: "usuario" });
+
+     
+        this.mensajes.push({ texto: data.response, tipo: "ia" });
+
+        this.nuevoMensaje = '';
+
+       
+        await nextTick();
+        const chatMensajes = document.getElementById("chat-mensajes");
+        chatMensajes.scrollTop = chatMensajes.scrollHeight;
+
+      } catch (err) {
+        console.error("Error enviando mensaje:", err);
+        alert("No se pudo enviar el mensaje.");
+      } finally {
+        this.enviando = false;
+      }
+    },
+
+    async nuevoChat() {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/create-chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ usuario_id: this.usuario_id })
+        });
+
+        const data = await res.json();
+        this.chat_id = data.chat_id;
+        localStorage.setItem("chat_id", data.chat_id);
+
+        this.mensajes = [{ texto: "Hola, ¿en qué puedo ayudarte hoy?", tipo: "ia" }];
+        this.nuevoMensaje = '';
+      } catch (err) {
+        console.error("Error creando nuevo chat:", err);
+      }
+    },
+
+    cerrarSesion() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+  },
+  mounted() {
+    this.cargarMensajes();
+  }
+}).mount('#app');
+</script>
+
 </body>
 </html>
