@@ -1,23 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import session, chat
+from routers import login, chat
 
 # Initialize FastAPI app
 app = FastAPI()
 
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(session.router)
+# routers
+app.include_router(login.router)
 app.include_router(chat.router)
 
-# Run the server (if running as a script)
+# Run the server
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
+
