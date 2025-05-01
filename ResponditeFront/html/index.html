@@ -43,33 +43,9 @@
     </div>
   </div>
 
-  <script>
-    document.querySelector("form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      try {
-        const email = document.querySelector("#email").value;
-        const password = document.querySelector("#password").value;
-  
-        const res = await fetch("http://127.0.0.1:8000/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-  
-        if (!res.ok) {
-          const error = await res.json();
-          throw new Error(error.detail || "Login failed.");
-        }
-  
-        const data = await res.json();
-        localStorage.setItem("usuario_id", data.usuario_id);
-        localStorage.setItem("role", data.role);
-        localStorage.setItem("chat_id", data.chat_id);
-        window.location.href = data.role === "admin" ? "ChatAdmin.html" : "ChatUser.html";
-      } catch (err) {
-        alert(err.message);
-      }
-    });
+  <script type="module">
+    import { Login } from '../src/components/login.js';
+    new Login();
   </script>
 
 </body>
