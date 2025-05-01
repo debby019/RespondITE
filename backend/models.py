@@ -5,6 +5,11 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
+class RegisterResponse(BaseModel):
+    id_usuario: str
+    nombre: str
+    email: str
+    rol: str
 
 class UserLogin(BaseModel):
     email: EmailStr
