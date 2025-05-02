@@ -9,29 +9,23 @@
 </head>
 <body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
 
-  <div id="app">
-    <button class = "btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-      ☰
-    </button>
-  
-    <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69) ;" >
-      <div  class="offcanvas-header">
+<div id="app">
+  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+    ☰
+  </button>
 
-    
-     
+  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69);">
+    <div class="offcanvas-header">
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-      </div>
-      <div class="offcanvas-body">
-        <img src="../images/logo.jpg" class="rounded-circle mb-3 d-block mx-auto" style="width: 80px; height:80px; object-fit:cover;">
-        <h3 class="offcanvas-body text-center">Usuarios sin respuesta</h3>
-      
+    </div>
+    <div class="offcanvas-body">
+      <img src="../images/logo.jpg" class="rounded-circle mb-3 d-block mx-auto" style="width: 80px; height:80px; object-fit:cover;">
+      <h3 class="offcanvas-body text-center">Usuarios sin respuesta</h3>
       <div class="position-absolute bottom-0 start-0 end-0 p-3">
-      <button class="btn btn-outline-light w-100">Cerrar sesion</button>
-      </div>
+        <button class="btn btn-outline-light w-100">Cerrar sesión</button>
       </div>
     </div>
-    
-    <!-- el logo-->
+  </div>
 
   <div class="w-100 bg-light py-3">
     <div class="d-flex justify-content-center">
@@ -40,17 +34,100 @@
   </div>
 
   <div class="container py-4 text-white text-center">
-    <h2 class="fw-bold mb-4">INFORMACION PARA LA BASE DE DATOS</h2>
-    
+    <h2 class="fw-bold mb-4">INFORMACIÓN PARA LA BASE DE DATOS</h2>
   </div>
 
   <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
-    <button class="btn  px-4 text-white" style="background-color: rgb(90, 90, 141);"> Anadir <br> Proceso</button>
-    <button class="btn  px-4 text-white" style="background-color: rgb(90, 90, 141);"> Eliminar <br> Proceso</button>
-
+    <button class="btn px-4 text-white" style="background-color: rgb(90, 90, 141);" @click="openModal()"> Añadir <br> Proceso</button>
   </div>
-     
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="container bg-white text-dark p-4 rounded">
+    <div v-for="(p, index) in procesos" :key="index" class="border p-3 mb-2 rounded">
+      <h5>Nombre de proceso</h5>
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr><th>Consulta</th><th>Información</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>{{ p.consulta }}</td><td>{{ p.informacion }}</td></tr>
+        </tbody>
+      </table>
+      <button class="btn btn-sm btn-warning me-2" @click="editProceso(index)">Editar</button>
+      <button class="btn btn-sm btn-danger" @click="deleteProceso(index)">Eliminar</button>
+    </div>
+  </div>
 
-  
+  <div class="modal fade" id="processModal" tabindex="-1" aria-labelledby="processModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content text-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="processModalLabel">{{ isEditing ? 'Editar Proceso' : 'Agregar Proceso' }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Consulta</label>
+            <input v-model="form.consulta" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Información</label>
+            <input v-model="form.informacion" class="form-control" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" @click="saveProceso">{{ isEditing ? 'Guardar cambios' : 'Agregar' }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const { createApp } = Vue;
+
+  createApp({
+    data() {
+      return {
+        procesos: [],
+        form: { consulta: '', informacion: '' },
+        currentEditIndex: null
+      };
+    },
+    computed: {
+      isEditing() {
+        return this.currentEditIndex !== null;
+      }
+    },
+    methods: {
+      openModal() {
+        this.form = { consulta: '', informacion: '' };
+        this.currentEditIndex = null;
+        const modal = new bootstrap.Modal(document.getElementById('processModal'));
+        modal.show();
+      },
+      editProceso(index) {
+        this.form = { ...this.procesos[index] };
+        this.currentEditIndex = index;
+        const modal = new bootstrap.Modal(document.getElementById('processModal'));
+        modal.show();
+      },
+      saveProceso() {
+        if (this.isEditing) {
+          this.procesos[this.currentEditIndex] = { ...this.form };
+        } else {
+          this.procesos.push({ ...this.form });
+        }
+        bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
+      },
+      deleteProceso(index) {
+        this.procesos.splice(index, 1);
+      }
+    }
+  }).mount('#app');
+</script>
+
+</body>
+</html>
