@@ -144,10 +144,29 @@
         } else {
           this.procesos.push(JSON.parse(JSON.stringify(this.form)));
         }
+
+        // Enviar enviar datos al servidor del archivo de texto
+        fetch('guardar.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(this.procesos)
+        });
+
         bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
       },
       deleteProceso(index) {
         this.procesos.splice(index, 1);
+
+        // Actualizar el archivo de texto
+        fetch('guardar.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(this.procesos)
+        });
       },
       addConsulta() {
         this.form.consultas.push({ consulta: '', informacion: '' });
