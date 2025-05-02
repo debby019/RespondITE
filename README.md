@@ -60,7 +60,7 @@ pip install python-jose[cryptography]
 ````
 
 ### EJEMPLO:
-![instalacion de libreria](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/instalacion.png) <br/>
+![instalacion de libreria](https://github.com/debby019/RespondITE/blob/6ca8a59e610d15c3e203c966aa511affc01948aa/Img/libreria.png) <br/>
 
 ### Archivo .env
 Dentro de la carpeta **backend**, crea un archivo llamado .env con las siguientes claves
@@ -87,6 +87,10 @@ Si la ejecución fue exitosa, deberías ver algo como lo siguiente:<br/>
 Una vez que el servidor esté corriendo, abre el archivo index.html, ubicado en la carpeta ResponditeFront/html, en tu navegador.<br/>
 ![index](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/index.png)<br/>
 
+### Base de Datos
+La base de datos está alojada en Supabase, por lo que no es necesario importar ningún script SQL en un gestor local.  
+El archivo `database_postgresql.sql` (ubicado en la raíz del proyecto) contiene las sentencias SQL usadas para crear las tablas, pero se incluye únicamente como referencia.  
+La conexión a Supabase se gestiona automáticamente a través de las credenciales definidas en el archivo `.env`.
 
 ## INTEGRANTES
 
