@@ -1,43 +1,36 @@
-from fastapi import APIRouter, HTTPException
-from models import UserCreate, UserLogin, RegisterResponse
-from logic.user import get_user_by_email, create_user, verify_password, get_or_create_chat
-from logic.auth import crear_token
-router = APIRouter()
+from fastapi import HTTPException
+from passlib.hash import bcrypt
+from conexion.dataBase import supabase
+from models import UserCreate
 
-@router.post("/register", response_model= RegisterResponse)
-async def register_user(user: UserCreate):
-    if get_user_by_email(user.email):
-        raise HTTPException(status_code=400, detail="Correo ya registrado.")
+def get_user_by_email(email: str):
+    result = supabase.table("usuarios").select("*").eq("email", email).execute()
+    return result.data[0] if result.data else None
 
-    created_user = create_user(user)
-    return {
-        "id_usuario": created_user["id_usuario"],
+def create_user(user: UserCreate):
+    hashed_pw = bcrypt.hash(user.password)
+    result = supabase.table("usuarios").insert({
         "nombre": user.nombre,
         "email": user.email,
+        "password": hashed_pw,
         "rol": "usuario"
-    }
+    }).execute()
 
-@router.post("/login")
-async def login_user(user: UserLogin):
-    db_user = get_user_by_email(user.email)
-    if not db_user:
-        raise HTTPException(status_code=400, detail="Correo electrónico no encontrado.")
+    if not result.data:
+        raise HTTPException(status_code=500, detail="Error al registrar el usuario.")
     
-    if not verify_password(user.password, db_user["password"]):
-        raise HTTPException(status_code=400, detail="Contraseña incorrecta.")
+    return result.data[0]
+
+def verify_password(plain_password: str, hashed_password: str):
+    return bcrypt.verify(plain_password, hashed_password)
+
+def get_or_create_chat(user_id: int):
+    chats = supabase.table("chat").select("*").eq("usuario_id", user_id).execute()
+    if chats.data:
+        return chats.data[0]["id_chat"]
     
-    chat_id = get_or_create_chat(db_user["id_usuario"])
-
-    token_data = {
-        "sub": str(db_user["id_usuario"]),
-        "role": db_user["rol"]
-    }
-    token = crear_token(token_data)
-    return {
-        "message": "Login exitoso",
-        "token": token,
-        "usuario_id": db_user["id_usuario"],
-        "role": db_user["rol"],
-        "chat_id": chat_id
-    }
-
+    new_chat = supabase.table("chat").insert({"usuario_id": user_id}).execute()
+    if not new_chat.data:
+        raise HTTPException(status_code=500, detail="Error al crear un nuevo chat.")
+    
+    return new_chat.data[0]["id_chat"]
