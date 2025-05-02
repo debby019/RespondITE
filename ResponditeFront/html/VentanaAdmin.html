@@ -43,13 +43,16 @@
 
   <div class="container bg-white text-dark p-4 rounded">
     <div v-for="(p, index) in procesos" :key="index" class="border p-3 mb-2 rounded">
-      <h5>Nombre de proceso</h5>
+      <h5>{{ p.nombre }}</h5>
       <table class="table table-bordered text-center">
         <thead>
           <tr><th>Consulta</th><th>Información</th></tr>
         </thead>
         <tbody>
-          <tr><td>{{ p.consulta }}</td><td>{{ p.informacion }}</td></tr>
+          <tr v-for="(item, i) in p.consultas" :key="i">
+            <td>{{ item.consulta }}</td>
+            <td>{{ item.informacion }}</td>
+          </tr>
         </tbody>
       </table>
       <button class="btn btn-sm btn-warning me-2" @click="editProceso(index)">Editar</button>
@@ -66,13 +69,16 @@
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label class="form-label">Consulta</label>
-            <input v-model="form.consulta" class="form-control" />
+            <label class="form-label">Nombre del Proceso</label>
+            <input v-model="form.nombre" class="form-control" />
           </div>
-          <div class="mb-3">
-            <label class="form-label">Información</label>
-            <input v-model="form.informacion" class="form-control" />
+          <div v-for="(item, i) in form.consultas" :key="i" class="mb-3 border p-2 rounded">
+            <label class="form-label">Consulta {{ i + 1 }}</label>
+            <input v-model="item.consulta" class="form-control mb-2" placeholder="Consulta" />
+            <input v-model="item.informacion" class="form-control" placeholder="Información" />
+            <button class="btn btn-sm btn-danger mt-2" @click="removeConsulta(i)" v-if="form.consultas.length > 1">Quitar</button>
           </div>
+          <button class="btn btn-sm btn-secondary mt-2" @click="addConsulta">Agregar otra consulta</button>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -92,7 +98,12 @@
     data() {
       return {
         procesos: [],
-        form: { consulta: '', informacion: '' },
+        form: {
+          nombre: '',
+          consultas: [
+            { consulta: '', informacion: '' }
+          ]
+        },
         currentEditIndex: null
       };
     },
@@ -103,27 +114,36 @@
     },
     methods: {
       openModal() {
-        this.form = { consulta: '', informacion: '' };
+        this.form = {
+          nombre: '',
+          consultas: [{ consulta: '', informacion: '' }]
+        };
         this.currentEditIndex = null;
         const modal = new bootstrap.Modal(document.getElementById('processModal'));
         modal.show();
       },
       editProceso(index) {
-        this.form = { ...this.procesos[index] };
+        this.form = JSON.parse(JSON.stringify(this.procesos[index]));
         this.currentEditIndex = index;
         const modal = new bootstrap.Modal(document.getElementById('processModal'));
         modal.show();
       },
       saveProceso() {
         if (this.isEditing) {
-          this.procesos[this.currentEditIndex] = { ...this.form };
+          this.procesos[this.currentEditIndex] = JSON.parse(JSON.stringify(this.form));
         } else {
-          this.procesos.push({ ...this.form });
+          this.procesos.push(JSON.parse(JSON.stringify(this.form)));
         }
         bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
       },
       deleteProceso(index) {
         this.procesos.splice(index, 1);
+      },
+      addConsulta() {
+        this.form.consultas.push({ consulta: '', informacion: '' });
+      },
+      removeConsulta(index) {
+        this.form.consultas.splice(index, 1);
       }
     }
   }).mount('#app');
