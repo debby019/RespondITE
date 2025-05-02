@@ -29,7 +29,7 @@ Es importante seleccionar la opción **Add Python to PATH** durante la instalaci
 
 ## PROCEDIMIENTO DE INSTALACIÓN
 Para comenzar a utilizar el proyecto, primero debes descargar o clonar el repositorio en tu computadora.
-![ZIP](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/main.png)
+![ZIP](https://github.com/debby019/RespondITE/blob/aaca716c133c71c7ca929c538dba4a88160eb131/Img/descargar.png)
 
 ### Instalación de dependencias
 En la terminal, dentro de la carpeta backend, instala las siguientes dependencias:
