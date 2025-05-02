@@ -42,21 +42,31 @@
   </div>
 
   <div class="container bg-white text-dark p-4 rounded">
-    <div v-for="(p, index) in procesos" :key="index" class="border p-3 mb-2 rounded">
-      <h5>{{ p.nombre }}</h5>
-      <table class="table table-bordered text-center">
-        <thead>
-          <tr><th>Consulta</th><th>Información</th></tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item, i) in p.consultas" :key="i">
-            <td>{{ item.consulta }}</td>
-            <td>{{ item.informacion }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <button class="btn btn-sm btn-warning me-2" @click="editProceso(index)">Editar</button>
-      <button class="btn btn-sm btn-danger" @click="deleteProceso(index)">Eliminar</button>
+    <div class="accordion" id="procesosAccordion">
+      <div class="accordion-item" v-for="(p, index) in procesos" :key="index">
+        <h2 class="accordion-header" :id="'heading' + index">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
+            {{ p.nombre }}
+          </button>
+        </h2>
+        <div :id="'collapse' + index" class="accordion-collapse collapse" :aria-labelledby="'heading' + index" data-bs-parent="#procesosAccordion">
+          <div class="accordion-body">
+            <table class="table table-bordered text-center">
+              <thead>
+                <tr><th>Consulta</th><th>Información</th></tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, i) in p.consultas" :key="i">
+                  <td>{{ item.consulta }}</td>
+                  <td>{{ item.informacion }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-sm btn-warning me-2" @click="editProceso(index)">Editar</button>
+            <button class="btn btn-sm btn-danger" @click="deleteProceso(index)">Eliminar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
