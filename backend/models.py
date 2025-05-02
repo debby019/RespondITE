@@ -19,7 +19,6 @@ class UserLogin(BaseModel):
 class ChatRequest(BaseModel):
     user_input: str
     tone: str = "neutral"
-    chat_id: str
 
 
 class Message(BaseModel):
