@@ -54,6 +54,11 @@ pip install passlib
 ````
 pip install python-multipart
 ````
+6. python-jose[cryptography] (JWT)
+````
+pip install python-jose[cryptography]
+````
+
 ### EJEMPLO:
 ![instalacion de libreria](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/instalacion.png) <br/>
 
