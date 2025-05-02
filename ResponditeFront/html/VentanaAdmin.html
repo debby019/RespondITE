@@ -38,7 +38,9 @@
   </div>
 
   <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
-    <button class="btn px-4 text-white" style="background-color: rgb(90, 90, 141);" @click="openModal()"> Añadir <br> Proceso</button>
+    <button class="btn px-4 text-white" style="background-color: rgb(90, 90, 141);" @click="openModal()">Añadir <br> Proceso</button>
+    <button class="btn btn-success" @click="downloadProcesos">Descargar como TXT</button>
+    <input type="file" class="btn btn-info" @change="importProcesos" />
   </div>
 
   <div class="container bg-white text-dark p-4 rounded">
@@ -145,7 +147,7 @@
           this.procesos.push(JSON.parse(JSON.stringify(this.form)));
         }
 
-        // Enviar enviar datos al servidor del archivo de texto
+        // Enviar datos al servidor del archivo de texto
         fetch('guardar.php', {
           method: 'POST',
           headers: {
@@ -158,21 +160,70 @@
       },
       deleteProceso(index) {
         this.procesos.splice(index, 1);
-
-        // Actualizar el archivo de texto
-        fetch('guardar.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.procesos)
-        });
       },
       addConsulta() {
         this.form.consultas.push({ consulta: '', informacion: '' });
       },
       removeConsulta(index) {
         this.form.consultas.splice(index, 1);
+      },
+      downloadProcesos() {
+        const contenido = this.procesos.map(p => {
+          let consultas = p.consultas.map(c => `  - Consulta: ${c.consulta}, Información: ${c.informacion}`).join('\n');
+          return `Proceso: ${p.nombre}\n${consultas}`;
+        }).join('\n\n');
+
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'procesos.txt';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      },
+      importProcesos(event) {
+        const file = event.target.files[0];
+        if (file && file.type === 'text/plain') {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const content = e.target.result;
+            const procesos = this.parseProcesos(content);
+            this.procesos = procesos;
+          };
+          reader.readAsText(file);
+        } else {
+          alert('Por favor, seleccione un archivo de texto válido.');
+        }
+      },
+      parseProcesos(content) {
+        const procesos = [];
+        const lines = content.split('\n');
+        let currentProceso = null;
+
+        lines.forEach(line => {
+          line = line.trim();
+          if (line.startsWith('Proceso: ')) {
+            if (currentProceso) {
+              procesos.push(currentProceso);
+            }
+            currentProceso = { nombre: line.replace('Proceso: ', ''), consultas: [] };
+          } else if (line.startsWith('- Consulta: ')) {
+            const parts = line.split(',');
+            const consulta = parts[0].replace('- Consulta: ', '').trim();
+            const informacion = parts[1].replace('Información: ', '').trim();
+            if (currentProceso) {
+              currentProceso.consultas.push({ consulta, informacion });
+            }
+          }
+        });
+
+        if (currentProceso) {
+          procesos.push(currentProceso);
+        }
+
+        return procesos;
       }
     }
   }).mount('#app');
