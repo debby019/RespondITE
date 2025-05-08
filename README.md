@@ -65,17 +65,20 @@ pip install python-jose[cryptography]
 ### Archivo .env
 Dentro de la carpeta **backend**, crea un archivo llamado .env con las siguientes claves
 ````
-SUPABASE_URL=https://nulsoiwjscvaxzxyjfgm.supabase.co
-SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bHNvaXdqc2N2YXh6eHlqZmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0NDgzMzcsImV4cCI6MjA1ODAyNDMzN30.WeWkC1Migmn8QKYI3XjvQ0CEnHo4eizH5_XImTvHfzw
+API_URL="api_url"
+API_KEY="api_key"
 
-SECRET_KEY=YGT1ayDJVyrsuLzFq-AY8P7iTJAGgMw584xA4rYPJ24
-ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=120
+SUPABASE_URL="https://nulsoiwjscvaxzxyjfgm.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bHNvaXdqc2N2YXh6eHlqZmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0NDgzMzcsImV4cCI6MjA1ODAyNDMzN30.WeWkC1Migmn8QKYI3XjvQ0CEnHo4eizH5_XImTvHfzw"
+
+SECRET_KEY="YGT1ayDJVyrsuLzFq-AY8P7iTJAGgMw584xA4rYPJ24"
+ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES="120"
 ````
 ## EJECUCIÓN DEL PROGRAMA
-Dirígete a la carpeta backend desde la terminal y ejecuta el siguiente comando:
+Dirígete a la carpeta principal desde la terminal y ejecuta el siguiente comando:
 ````
-uvicorn main:app --reload 
+uvicorn backend.main:app --reload 
 ````
 **EJEMPLO** <br/>
 ![Ejecucion main](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/main.png)<br/>
