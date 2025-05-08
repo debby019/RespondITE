@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from passlib.hash import bcrypt
-from conexion.dataBase import supabase
-from models import UserCreate
+from backend.conexion.dataBase import supabase
+from backend.models import UserCreate
 
 def get_user_by_email(email: str):
     result = supabase.table("usuarios").select("*").eq("email", email).execute()

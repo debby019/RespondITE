@@ -1,6 +1,6 @@
 import os
 import requests
-from dataBase import supabase
+from backend.conexion.dataBase import supabase
 
 
 # downloaded txt files will be stored here

@@ -2,7 +2,7 @@ import os
 import requests
 from dotenv import load_dotenv
 from supabase import create_client
-from conexion.dataBase import supabase
+from backend.conexion.dataBase import supabase
 
 load_dotenv()
 

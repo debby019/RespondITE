@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from models import UserCreate, UserLogin, RegisterResponse
-from logic.user import get_user_by_email, create_user, verify_password, get_or_create_chat
-from logic.auth import crear_token
+from backend.models import UserCreate, UserLogin, RegisterResponse
+from backend.logic.user import get_user_by_email, create_user, verify_password, get_or_create_chat
+from backend.logic.auth import crear_token
 
 router = APIRouter()
 

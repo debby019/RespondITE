@@ -1,8 +1,10 @@
 from fastapi import APIRouter
-from models import ChatRequest
-from logic.chat import save_user_message, generate_ai_response, get_chat_history_by_chat_id
+from backend.models import ChatRequest
+from backend.logic.chat import save_user_message, generate_ai_response, get_chat_history_by_chat_id
 
 router = APIRouter()
+
+# meter aqui el @router.post("/chat")
 
 # Enviar mensaje y obtener respuesta de IA
 @router.post("/chats/{chat_id}/mensajes")

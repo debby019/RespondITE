@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-from conexion.dataBase import supabase
-from ai.aiEngine import handle_user_input
+from backend.conexion.dataBase import supabase
+from backend.ai.aiEngine import handle_user_input
 
 def save_user_message(chat_id: str, mensaje: str):
     result = supabase.table("mensaje").insert({
