@@ -63,7 +63,7 @@ pip install python-jose[cryptography]
 ![instalacion de libreria](https://github.com/debby019/RespondITE/blob/6ca8a59e610d15c3e203c966aa511affc01948aa/Img/libreria.png) <br/>
 
 ### Archivo .env
-Dentro de la carpeta **backend**, crea un archivo llamado .env con las siguientes claves
+Dentro de la carpeta **principal**, crea un archivo llamado .env con las siguientes claves
 ````
 API_URL="api_url"
 API_KEY="api_key"
