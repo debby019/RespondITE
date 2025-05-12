@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 class UserCreate(BaseModel):
     nombre: str
@@ -18,7 +19,8 @@ class UserLogin(BaseModel):
 
 class ChatRequest(BaseModel):
     user_input: str
-    tone: str = "neutral"
+    chat_id: Optional[str]
+    tone: Optional[str] = "neutral"
 
 
 class Message(BaseModel):
