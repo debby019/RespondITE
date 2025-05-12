@@ -73,7 +73,7 @@ SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 SECRET_KEY="YGT1ayDJVyrsuLzFq-AY8P7iTJAGgMw584xA4rYPJ24"
 ALGORITHM="HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES="120"
+ACCESS_TOKEN_EXPIRE_MINUTES=120
 ````
 ## EJECUCIÓN DEL PROGRAMA
 Dirígete a la carpeta principal desde la terminal y ejecuta el siguiente comando:
