@@ -55,9 +55,23 @@ def set_ai_tone(tone: str) -> str:
         return "You respond in a neutral tone."
 
 def handle_user_input(user_input: str, chat_id: str, tone: str = "neutral"):
+    from backend.textProcessor import get_knowledge_data
+
     system_message = set_ai_tone(tone)
     supabase.table("mensaje").insert([
         {"chat_id": chat_id, "mensaje": system_message, "remitente": "system"}
     ]).execute()
+
+    knowledge = get_knowledge_data()
+    user_question = user_input.lower()
+
+    for key, value in knowledge.items():
+        if key.lower() in user_question:
+            info_message = f"Información del procedimiento '{key}':\n{value}"
+            supabase.table("mensaje").insert([
+                {"chat_id": chat_id, "mensaje": info_message, "remitente": "system"}
+            ]).execute()
+            break
+
     ai_response = generate_response(user_input, chat_id)
     return ai_response
