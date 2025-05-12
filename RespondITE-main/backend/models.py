@@ -1,0 +1,29 @@
+from pydantic import BaseModel, EmailStr
+from typing import Optional
+
+class UserCreate(BaseModel):
+    nombre: str
+    email: EmailStr
+    password: str
+
+class RegisterResponse(BaseModel):
+    id_usuario: str
+    nombre: str
+    email: str
+    rol: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class ChatRequest(BaseModel):
+    user_input: str
+    chat_id: Optional[str]
+    tone: Optional[str] = "neutral"
+
+
+class Message(BaseModel):
+    chat_id: str
+    mensaje: str
+    remitente: str
