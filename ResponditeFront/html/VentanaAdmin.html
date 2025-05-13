@@ -25,12 +25,17 @@
     }
   </style>
 </head>
-<body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
+<body class="vh-100" style="background: url('../images/bgnubes.png') no-repeat center/cover;">
 
 <div id="app">
   <div class="datetime" id="datetime"></div>
 
-  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
+  <div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-3">
+    <button class="btn btn-light" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
+    <h4 class="text-white m-0 fw-bold fst-italic" style="text-shadow: 1px 1px 4px #000; font-family: 'Georgia', serif;">
+      Respond<span class="text-warning">ITE</span>
+    </h4>
+  </div>
 
   <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69);">
     <div class="offcanvas-header">
@@ -45,18 +50,19 @@
     </div>
   </div>
 
-  <div class="w-100 bg-light py-3">
+  <!-- Contenedor azul oscuro para el logo -->
+  <div class="w-100 py-3" style="background-color: #001f3f;">
     <div class="d-flex justify-content-center">
       <img src="../images/logo.png" alt="RespondITE Logo" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
     </div>
   </div>
 
-  <div class="container py-4 text-white text-center">
+  <div class="container py-4 text-black text-center">
     <h2 class="fw-bold mb-4">INFORMACIÓN PARA LA BASE DE DATOS</h2>
   </div>
 
   <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
-    <button class="btn px-4 text-black" style="background-color: rgb(255, 255, 255);" @click="openModal()">Añadir <br> Proceso</button>
+    <button class="btn px-4 text-black" style="background-color: rgb(174, 210, 241);" @click="openModal()">Añadir <br> Proceso</button>
   </div>
 
   <div class="container bg-white text-dark p-4 rounded">
