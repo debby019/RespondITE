@@ -1,6 +1,0 @@
-Proceso: Credencial
-  - Consulta: Reposición por extravio, Información: Solicitas el recibo en la plataforma SIE, pagas en el banco y presentas el comprobante en servicios escolares
-  - Consulta: Correción de errores, Información: Formulario
-
-Proceso: Constancias
-  - Consulta: Solicitud, Información: 60 pesos

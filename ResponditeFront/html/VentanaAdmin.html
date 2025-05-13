@@ -1,18 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RespondITE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      opacity: 0;
+      transition: opacity 1.5s ease-in;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+    .datetime {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      z-index: 1050;
+      text-shadow: 1px 1px 4px #000;
+    }
+  </style>
 </head>
 <body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
 
 <div id="app">
-  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-    ☰
-  </button>
+  <div class="datetime" id="datetime"></div>
+
+  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
 
   <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69);">
     <div class="offcanvas-header">
@@ -20,7 +38,7 @@
     </div>
     <div class="offcanvas-body">
       <img src="../images/logo.jpg" class="rounded-circle mb-3 d-block mx-auto" style="width: 80px; height:80px; object-fit:cover;">
-      <h3 class="offcanvas-body text-center">Usuarios sin respuesta</h3>
+      <h3 class="text-center">Usuarios sin respuesta</h3>
       <div class="position-absolute bottom-0 start-0 end-0 p-3">
         <button class="btn btn-outline-light w-100">Cerrar sesión</button>
       </div>
@@ -39,13 +57,11 @@
 
   <div class="d-flex justify-content-center gap-4 mb-4 flex-wrap">
     <button class="btn px-4 text-white" style="background-color: rgb(90, 90, 141);" @click="openModal()">Añadir <br> Proceso</button>
-    <button class="btn btn-success" @click="downloadProcesos">Descargar como TXT</button>
-    <input type="file" class="btn btn-info" @change="importProcesos" />
   </div>
 
   <div class="container bg-white text-dark p-4 rounded">
     <div class="accordion" id="procesosAccordion">
-      <div class="accordion-item" v-for="(p, index) in procesos" :key="index">
+      <div class="accordion-item" v-for="(p, index) in procesos" :key="p.id_proceso">
         <h2 class="accordion-header" :id="'heading' + index">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#collapse' + index" aria-expanded="false" :aria-controls="'collapse' + index">
             {{ p.nombre }}
@@ -76,7 +92,7 @@
     <div class="modal-dialog">
       <div class="modal-content text-dark">
         <div class="modal-header">
-          <h5 class="modal-title" id="processModalLabel">{{ isEditing ? 'Editar Proceso' : 'Agregar Proceso' }}</h5>
+          <h5 class="modal-title">{{ isEditing ? 'Editar Proceso' : 'Agregar Proceso' }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -99,12 +115,30 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const { createApp } = Vue;
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+
+  window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+  });
+
+  function updateDateTime() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-ES');
+    const timeStr = now.toLocaleTimeString('es-ES');
+    document.getElementById('datetime').textContent = `${dateStr} ${timeStr}`;
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  const supabase = createClient(
+    'https://nulsoiwjscvaxzxyjfgm.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bHNvaXdqc2N2YXh6eHlqZmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0NDgzMzcsImV4cCI6MjA1ODAyNDMzN30.WeWkC1Migmn8QKYI3XjvQ0CEnHo4eizH5_XImTvHfzw'
+  );
 
   createApp({
     data() {
@@ -112,9 +146,7 @@
         procesos: [],
         form: {
           nombre: '',
-          consultas: [
-            { consulta: '', informacion: '' }
-          ]
+          consultas: [{ consulta: '', informacion: '' }]
         },
         currentEditIndex: null
       };
@@ -125,109 +157,84 @@
       }
     },
     methods: {
+      async fetchProcesos() {
+        const { data: procesos, error: errorProcesos } = await supabase.from('procesos').select('*');
+        if (errorProcesos) return console.error('Error al cargar procesos:', errorProcesos);
+
+        const { data: conocimiento, error: errorConocimiento } = await supabase.from('base_conocimiento').select('*');
+        if (errorConocimiento) return console.error('Error al cargar base de conocimiento:', errorConocimiento);
+
+        this.procesos = procesos.map(p => ({
+          ...p,
+          consultas: conocimiento.filter(c => c.proceso_id === p.id_proceso)
+        }));
+      },
       openModal() {
         this.form = {
           nombre: '',
           consultas: [{ consulta: '', informacion: '' }]
         };
         this.currentEditIndex = null;
-        const modal = new bootstrap.Modal(document.getElementById('processModal'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('processModal')).show();
       },
       editProceso(index) {
-        this.form = JSON.parse(JSON.stringify(this.procesos[index]));
+        const p = this.procesos[index];
+        this.form = {
+          nombre: p.nombre,
+          consultas: p.consultas.map(c => ({
+            consulta: c.consulta,
+            informacion: c.informacion
+          }))
+        };
         this.currentEditIndex = index;
-        const modal = new bootstrap.Modal(document.getElementById('processModal'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('processModal')).show();
       },
-      saveProceso() {
+      async saveProceso() {
         if (this.isEditing) {
-          this.procesos[this.currentEditIndex] = JSON.parse(JSON.stringify(this.form));
+          const proceso = this.procesos[this.currentEditIndex];
+          await supabase.from('procesos').update({ nombre: this.form.nombre }).eq('id_proceso', proceso.id_proceso);
+          await supabase.from('base_conocimiento').delete().eq('proceso_id', proceso.id_proceso);
+          for (const c of this.form.consultas) {
+            await supabase.from('base_conocimiento').insert({
+              proceso_id: proceso.id_proceso,
+              consulta: c.consulta,
+              informacion: c.informacion
+            });
+          }
         } else {
-          this.procesos.push(JSON.parse(JSON.stringify(this.form)));
+          const { data, error } = await supabase.from('procesos').insert({ nombre: this.form.nombre }).select();
+          if (error || !data.length) return alert('Error al insertar proceso');
+
+          const newProcesoId = data[0].id_proceso;
+          for (const c of this.form.consultas) {
+            await supabase.from('base_conocimiento').insert({
+              proceso_id: newProcesoId,
+              consulta: c.consulta,
+              informacion: c.informacion
+            });
+          }
         }
 
-        // Enviar datos al servidor del archivo de texto
-        fetch('guardar.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.procesos)
-        });
-
         bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
+        this.fetchProcesos();
       },
-      deleteProceso(index) {
-        this.procesos.splice(index, 1);
+      async deleteProceso(index) {
+        const id = this.procesos[index].id_proceso;
+        await supabase.from('base_conocimiento').delete().eq('proceso_id', id);
+        await supabase.from('procesos').delete().eq('id_proceso', id);
+        this.fetchProcesos();
       },
       addConsulta() {
         this.form.consultas.push({ consulta: '', informacion: '' });
       },
       removeConsulta(index) {
         this.form.consultas.splice(index, 1);
-      },
-      downloadProcesos() {
-        const contenido = this.procesos.map(p => {
-          let consultas = p.consultas.map(c => `  - Consulta: ${c.consulta}, Información: ${c.informacion}`).join('\n');
-          return `Proceso: ${p.nombre}\n${consultas}`;
-        }).join('\n\n');
-
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'procesos.txt';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      },
-      importProcesos(event) {
-        const file = event.target.files[0];
-        if (file && file.type === 'text/plain') {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const content = e.target.result;
-            const procesos = this.parseProcesos(content);
-            this.procesos = procesos;
-          };
-          reader.readAsText(file);
-        } else {
-          alert('Por favor, seleccione un archivo de texto válido.');
-        }
-      },
-      parseProcesos(content) {
-        const procesos = [];
-        const lines = content.split('\n');
-        let currentProceso = null;
-
-        lines.forEach(line => {
-          line = line.trim();
-          if (line.startsWith('Proceso: ')) {
-            if (currentProceso) {
-              procesos.push(currentProceso);
-            }
-            currentProceso = { nombre: line.replace('Proceso: ', ''), consultas: [] };
-          } else if (line.startsWith('- Consulta: ')) {
-            const parts = line.split(',');
-            const consulta = parts[0].replace('- Consulta: ', '').trim();
-            const informacion = parts[1].replace('Información: ', '').trim();
-            if (currentProceso) {
-              currentProceso.consultas.push({ consulta, informacion });
-            }
-          }
-        });
-
-        if (currentProceso) {
-          procesos.push(currentProceso);
-        }
-
-        return procesos;
       }
+    },
+    mounted() {
+      this.fetchProcesos();
     }
   }).mount('#app');
 </script>
-
 </body>
 </html>
