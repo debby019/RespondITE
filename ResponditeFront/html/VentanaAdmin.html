@@ -126,8 +126,17 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
   import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+  import { validateSession } from '../src/services/sessionValidator.js';
 
-  window.addEventListener('load', () => {
+  window.addEventListener("DOMContentLoaded", () => {
+    const userData = validateSession();
+
+    if (!userData || userData.role !== 'admin') {
+      window.location.href = "index.html";
+      return;
+    }
+
+    const { usuario_id, role, chat_id } = userData;
     document.body.classList.add('loaded');
   });
 
