@@ -5,81 +5,151 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RespondITE</title>
 
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
     html, body {
       height: 100%;
-      overflow: hidden; 
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
+
+    body {
+      background: url('../images/fondo.png') no-repeat center/cover;
+    }
+
+    .barra-nubes {
+      background: url('../images/nubess.png') repeat-x;
+      background-size: cover;
+      animation: moverNubes 60s linear infinite;
+      height: 100px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes moverNubes {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    #chat-body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding-bottom: 80px;
+    }
+
     #chat-mensajes {
-      height: calc(100vh - 250px);
+      flex: 1;
       overflow-y: auto;
       padding: 10px;
     }
-    #chat-input input {
+
+    #chat-input-fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #294065;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      z-index: 999;
+    }
+
+    #chat-input-fixed input {
       height: 45px;
-      resize: none;
-      overflow-y: auto;
+    }
+
+    .enviar-btn {
+      background-color: #151d38;
+      color: #fff;
+      font-family: 'Lilita One', sans-serif;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgb(14, 17, 44);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .enviar-btn:hover {
+      background-color: #6979b2;
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    }
+
+    .enviar-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
 
-<body class="vh-100" style="background: url('../images/fondo.png') no-repeat center/cover;">
+<body>
 <div id="app">
-
-  <button class="btn btn-light position-absolute top-0 start-0 m-3" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+  <button class="btn btn-light position-absolute top-0 start-0 m-3" style="background-color: #7d8ba2;" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
     ☰
   </button>
-  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33,33,69);">
+
+  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color: rgb(33,33,69);">
     <div class="offcanvas-header">
-      <h4 class="offcanvas-title text-center">RESPONDITE</h4>
+      <h4 class="offcanvas-title mx-auto">RESPONDITE</h4>
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
-    <div class="offcanvas-body">
-      <img src="../images/logo.jpg" class="rounded-circle mb-3 d-block mx-auto" style="width: 60px; height:60px; object-fit:cover;">
-      <button class="btn btn-dark w-100 mb-2" @click="nuevoChat">Nuevo chat</button>
-      <button class="btn btn-dark w-100 mb-2">Historial de chats</button>
-      <div class="position-absolute bottom-0 start-0 end-0 p-3">
+    <div class="offcanvas-body d-flex flex-column justify-content-between">
+      <div>
+        <img src="../images/albatro.png" class="rounded-circle d-block mx-auto mb-4" style="width: 40px; height: 40px; object-fit: cover;">
+        <button class="btn btn-dark w-100 mb-2" @click="nuevoChat">Nuevo chat</button>
+        <button class="btn btn-dark w-100 mb-2">Historial de chats</button>
+      </div>
+      <div class="mt-auto">
         <button class="btn btn-outline-light w-100" @click="cerrarSesion">Cerrar sesión</button>
       </div>
     </div>
   </div>
 
-  <div class="w-100 bg-light py-3">
-    <div class="d-flex justify-content-center">
-      <img src="../images/logo.jpg" alt="RespondITE Logo" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
-    </div>
+  <div class="w-100 barra-nubes d-flex justify-content-center align-items-center gap-2">
+    <img src="../images/logo_transparente.png" alt="RespondITE Logo" style="width: 50px; height: 50px; object-fit: cover;">
+    <span style="font-family: 'Lilita One', sans-serif; font-size: 24px; color: white;">
+      Respond<span style="color: #e7d162;">ITE</span>
+    </span>
   </div>
 
-  <div class="w-100 d-flex flex-column justify-content-center align-items-center" style="height: calc(100vh - 110px);">
-    <p class="text-light text-center pt-2">{{ fecha }}</p>
-
-
+  <div id="chat-body" class="w-100">
+    <p class="text-light text-center pt-4" style="font-family: 'Trebuchet MS';">{{ fecha }}</p>
     <div id="chat-mensajes" class="w-100 px-4">
       <div v-for="(msg, index) in mensajes" :key="index" class="d-flex my-2" :class="msg.tipo === 'usuario' ? 'justify-content-end' : 'align-items-center'">
         <template v-if="msg.tipo === 'ia'">
           <img src="../images/logo.jpg" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-          <div class="p-3 rounded bg-light" style="max-width: 70%; word-break: break-word;">{{ msg.texto }}</div>
+          <div class="p-3 rounded bg-light" style="max-width: 70%; word-break: break-word;">
+            <div>{{ msg.texto }}</div>
+            <small class="text-end d-block mt-1" style="font-size: 0.75rem; opacity: 0.7;">{{ msg.hora }}</small>
+          </div>
         </template>
         <template v-else>
-          <div class="p-3 rounded bg-primary text-white" style="max-width: 70%; word-break: break-word;">{{ msg.texto }}</div>
+          <div class="p-3 rounded text-white" style="max-width: 70%; word-break: break-word; background-color: #212e43;">
+            <div>{{ msg.texto }}</div>
+            <small class="text-end d-block mt-1" style="font-size: 0.75rem; opacity: 0.7;">{{ msg.hora }}</small>
+          </div>
         </template>
       </div>
     </div>
-
-
-    <div id="chat-input" class="position-relative w-100 p-3 border-top" style="background-color: #294065;">
-      <div class="d-flex">
-        <input type="text" class="form-control rounded-pill me-2" placeholder="Escribe un mensaje..." v-model="nuevoMensaje" @keyup.enter="enviarMensaje">
-        <button class="btn btn-primary rounded-pill" @click="enviarMensaje">{{ enviando ? 'Enviando...' : 'Enviar' }}</button>
-      </div>
-    </div>
-
   </div>
 
+  <div id="chat-input-fixed">
+    <div class="container d-flex">
+      <input type="text" class="form-control rounded-pill me-2" placeholder="Escribe un mensaje..." v-model="nuevoMensaje" @keyup.enter="enviarMensaje">
+      <button class="btn enviar-btn" @click="enviarMensaje">
+        {{ enviando ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -130,3 +200,4 @@
 
 </body>
 </html>
+
