@@ -19,7 +19,7 @@ export class Login {
         loadingBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Cargando...';
 
         const data = await authService.login(email, password);
-        window.location.href = data.role === "admin" ? "ChatAdmin.html" : "ChatUser.html";
+        window.location.href = "chatUser.html";
       } catch (error) {
         alert(error.message);
         form.querySelector("#password").value = "";

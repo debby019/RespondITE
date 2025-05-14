@@ -1,5 +1,16 @@
 import { chatService } from '../services/chatServices.js';
 import { authService } from '../services/authServices.js';
+import { validateSession } from '../services/sessionValidator.js';
+
+window.addEventListener("DOMContentLoaded", () => {
+  const userData = validateSession();
+
+  if (!userData) return;
+
+  const { usuario_id, role, chat_id } = userData;
+
+  new ChatInterface();  
+});
 
 export class ChatInterface {
   constructor() {
@@ -14,7 +25,7 @@ export class ChatInterface {
       authService.logout();
       window.location.href = "index.html";
       return;
-    }
+    } 
 
     const vueData = {
       fecha: new Date().toLocaleDateString('es-MX', { 
@@ -26,7 +37,8 @@ export class ChatInterface {
       mensajes: [],
       enviando: false,
       usuario_id: this.currentUser.id,
-      chat_id: this.currentUser.chat_id
+      chat_id: this.currentUser.chat_id,
+      esAdmin: this.currentUser.role === 'admin',
     };
 
     this.initVueApp(vueData);
@@ -38,6 +50,7 @@ export class ChatInterface {
         return initialData; 
       },
       methods: {
+
         async cargarMensajes() {
           try {
             const mensajes = await chatService.getChatHistory(this.chat_id);
@@ -87,13 +100,22 @@ export class ChatInterface {
               chatContainer.scrollTop = chatContainer.scrollHeight;
             }
           });
+        },
+
+        adminInterfaz(){
+          window.location.href = "VentanaAdmin.html";
+        },
+        cerrarSesion() {
+          authService.logout();
+          window.location.href = "index.html";
         }
       },
       mounted() {
         this.cargarMensajes();
       }
-    });
 
+    });
+    
     this.app.mount('#app');
   }
 }

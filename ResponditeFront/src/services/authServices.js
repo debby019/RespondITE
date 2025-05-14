@@ -4,11 +4,11 @@ export const authService = {
   async login(email, password) {
     const data = await api.post("/login", { email, password });
     
-    // Datos de sesión
+    // Datos de sesion
     localStorage.setItem("token", data.token );
     localStorage.setItem("user", JSON.stringify({
       id: data.usuario_id,
-      role: data.rol,
+      role: data.role,
       chat_id: data.chat_id
     }));
 
@@ -31,9 +31,10 @@ export const authService = {
 
   logout() {
     try {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        console.log("Local storage cleared (logout)");
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      console.log("Local storage cleared (logout)");
     } catch (e) {
         console.warn("Failed to clear localStorage:", e);
     }
