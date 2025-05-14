@@ -4,7 +4,8 @@ export const chatService = {
   async sendMessage(mensaje, chatId) {
     return api.post("/chat", {
       user_input: mensaje,
-      chat_id: chatId
+      chat_id: chatId,
+      tone: "neutral"
     });
   },
 

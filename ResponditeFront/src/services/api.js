@@ -6,7 +6,7 @@ export const api = {
       method,
       headers: {
         "Content-Type": "application/json",
-        "Authorization": localStorage.getItem("token") || ""
+        "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
       },
     };
 

@@ -30,7 +30,13 @@ export const authService = {
   },
 
   logout() {
-    localStorage.clear();
+    try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        console.log("Local storage cleared (logout)");
+    } catch (e) {
+        console.warn("Failed to clear localStorage:", e);
+    }
   },
 
   getCurrentUser() {
