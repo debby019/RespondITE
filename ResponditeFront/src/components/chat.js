@@ -39,6 +39,8 @@ export class ChatInterface {
       usuario_id: this.currentUser.id,
       chat_id: this.currentUser.chat_id,
       esAdmin: this.currentUser.role === 'admin',
+      chats: [],
+      chatSeleccionado: null
     };
 
     this.initVueApp(vueData);
@@ -50,14 +52,28 @@ export class ChatInterface {
         return initialData; 
       },
       methods: {
+        async cargarHistorialChats() {
+          try {
+            const historial = await chatService.getUserChats();
+            this.chats = historial;
+          } catch (error) {
+            console.error("Error al cargar historial:", error);
+          }
+        },
+
+        async seleccionarChat(chat) {
+          this.chat_id = chat.id_chat;
+          this.chatSeleccionado = chat.id_chat;
+          await this.cargarMensajes();
+        },
 
         async cargarMensajes() {
           try {
             const mensajes = await chatService.getChatHistory(this.chat_id);
             this.mensajes = mensajes.map(msg => ({
-              texto: msg.contenido || msg.Mensaje,
+              texto: msg.mensaje,
               tipo: msg.remitente === 'usuario' ? 'usuario' : 'ia',
-              timestamp: msg.timestamp
+              timestamp: msg.fecha_envio
             }));
             this.scrollToBottom();
           } catch (error) {
@@ -111,6 +127,7 @@ export class ChatInterface {
         }
       },
       mounted() {
+        this.cargarHistorialChats();
         this.cargarMensajes();
       }
 

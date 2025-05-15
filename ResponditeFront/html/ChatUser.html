@@ -106,8 +106,21 @@
       <div>
         <img src="../images/albatro.png" class="rounded-circle d-block mx-auto mb-4" style="width: 40px; height: 40px; object-fit: cover;">
         <button class="btn btn-dark w-100 mb-2" @click="nuevoChat">Nuevo chat</button>
-        <button class="btn btn-dark w-100 mb-2">Historial de chats</button>
         <button v-if="esAdmin" class="btn btn-danger w-100 mb-2" @click="adminInterfaz">ADMIN</button>
+
+        <div id="chat-historial" class="list-group">
+          <button 
+            v-for="chat in chats" 
+            :key="chat.id" 
+            @click="seleccionarChat(chat)"
+            :class="['list-group-item', 'list-group-item-action', { active: chatSeleccionado === chat.id }]"
+          >
+            ❤️ - {{ new Date(chat.fecha_inicio).toLocaleString() }}
+
+          </button>
+        </div>
+
+
       </div>
       <div class="mt-auto">
         <button class="btn btn-outline-light w-100" @click="cerrarSesion">Cerrar sesión</button>
