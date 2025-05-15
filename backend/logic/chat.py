@@ -28,3 +28,10 @@ def get_chat_history_by_chat_id(chat_id: str):
         return result.data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+def create_chat(user_id: str):
+    new_chat = supabase.table("chat").insert({"usuario_id": user_id}).execute()
+    if not new_chat.data:
+        raise HTTPException(status_code=500, detail="Error al crear un nuevo chat.")
+    return new_chat.data[0]["id_chat"]
+

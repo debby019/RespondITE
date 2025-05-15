@@ -27,3 +27,7 @@ class Message(BaseModel):
     chat_id: str
     mensaje: str
     remitente: str
+
+class ChatRequestBody(BaseModel):
+    usuario_id: str
+    

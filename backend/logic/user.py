@@ -24,13 +24,12 @@ def create_user(user: UserCreate):
 def verify_password(plain_password: str, hashed_password: str):
     return bcrypt.verify(plain_password, hashed_password)
 
-def get_or_create_chat(user_id: int):
-    chats = supabase.table("chat").select("*").eq("usuario_id", user_id).execute()
-    if chats.data:
-        return chats.data[0]["id_chat"]
-    
-    new_chat = supabase.table("chat").insert({"usuario_id": user_id}).execute()
-    if not new_chat.data:
-        raise HTTPException(status_code=500, detail="Error al crear un nuevo chat.")
-    
-    return new_chat.data[0]["id_chat"]
+def get_chats_by_user_id(user_id: str):
+    result = supabase.table("chat").select("*").eq("usuario_id", user_id).order("fecha_inicio", desc=True).execute()
+    for chat in result.data:
+        print(chat["id_chat"], chat["fecha_inicio"])
+
+    if not result.data:
+        print("no funciono")
+        return []
+    return result.data

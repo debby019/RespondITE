@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from backend.models import UserCreate, UserLogin, RegisterResponse
-from backend.logic.user import get_user_by_email, create_user, verify_password, get_or_create_chat
+from backend.logic.user import get_user_by_email, create_user, verify_password
 from backend.logic.auth import crear_token
 
 router = APIRouter()
@@ -27,8 +27,6 @@ async def login_user(user: UserLogin):
     if not verify_password(user.password, db_user["password"]):
         raise HTTPException(status_code=400, detail="Contraseña incorrecta.")
     
-    chat_id = get_or_create_chat(db_user["id_usuario"])
-    
     token_data = {
         "sub": str(db_user["id_usuario"]),
         "role": db_user["rol"]
@@ -39,5 +37,4 @@ async def login_user(user: UserLogin):
         "token": token,
         "usuario_id": db_user["id_usuario"],
         "role": db_user["rol"],
-        "chat_id": chat_id
     }
