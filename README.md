@@ -80,9 +80,6 @@ Dirígete a la carpeta principal desde la terminal y ejecuta el siguiente comand
 ````
 uvicorn backend.main:app --reload 
 ````
-**EJEMPLO** <br/>
-![Ejecucion main](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/main.png)<br/>
-
 
 Si la ejecución fue exitosa, deberías ver algo como lo siguiente:<br/>
 ![Ejecucion main2](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/ejecucion.png)<br/>
