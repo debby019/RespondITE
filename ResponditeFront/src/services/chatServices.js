@@ -13,9 +13,9 @@ export const chatService = {
     return api.get(`/chats/${chatId}/mensajes`);
   },
 
-  async createNewChat(usuarioId) {
-    return api.post("/chats/nuevo", { usuario_id: usuarioId });
-  }, 
+  async createNewChat() {
+    return api.post("/chats/nuevo");
+  },
 
   
 async getUserChats() {

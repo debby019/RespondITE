@@ -35,12 +35,12 @@ export class ChatInterface {
       }),
       nuevoMensaje: '',
       mensajes: [],
+      chats: [],
+      chatSeleccionado: null,
+      chat_id: null, 
       enviando: false,
       usuario_id: this.currentUser.id,
-      chat_id: this.currentUser.chat_id,
       esAdmin: this.currentUser.role === 'admin',
-      chats: [],
-      chatSeleccionado: null
     };
 
     this.initVueApp(vueData);
@@ -68,6 +68,7 @@ export class ChatInterface {
         },
 
         async cargarMensajes() {
+          if (!this.chat_id) return;
           try {
             const mensajes = await chatService.getChatHistory(this.chat_id);
             this.mensajes = mensajes.map(msg => ({
@@ -109,6 +110,16 @@ export class ChatInterface {
           }
         },
 
+        async nuevoChat() {
+          try {
+            const res = await chatService.createNewChat();
+            this.chat_id = res.id_chat;
+            this.chatSeleccionado = res.id_chat;
+            this.mensajes = [];
+            await this.cargarHistorialChats();
+          } catch (e) { console.error(e) }
+        },
+
         scrollToBottom() {
           this.$nextTick(() => {
             const chatContainer = document.getElementById("chat-mensajes");
@@ -128,7 +139,7 @@ export class ChatInterface {
       },
       mounted() {
         this.cargarHistorialChats();
-        this.cargarMensajes();
+        this.nuevoChat();
       }
 
     });
