@@ -69,19 +69,9 @@ def generate_response(user_input: str, knowledge_data: dict, chat_history: list)
 def handle_user_input(user_input: str, chat_id: str, tone: str = "neutral"):
     from backend.textProcessor import get_knowledge_data
 
-    system_message = set_ai_tone(tone)
-    supabase.table("mensaje").insert([
-        {"chat_id": chat_id, "mensaje": system_message, "remitente": "system"}
-    ]).execute()
-
     chat_history = get_chat_context(chat_id)
     knowledge = get_knowledge_data()
 
     ai_response = generate_response(user_input, knowledge, chat_history)
-
-    supabase.table("mensaje").insert([
-        {"chat_id": chat_id, "mensaje": user_input, "remitente": "usuario"},
-        {"chat_id": chat_id, "mensaje": ai_response, "remitente": "assistant"}
-    ]).execute()
 
     return ai_response
