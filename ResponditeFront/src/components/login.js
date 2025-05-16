@@ -11,7 +11,15 @@ export class Login {
       e.preventDefault();
       
       const email = form.querySelector("#email").value.trim();
-      const password = form.querySelector("#password").value;
+      const password = form.querySelector("#password").value.trim();
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const containsMaliciousChars = /<|>|'|"|;|--|\/\*/.test(email + password);
+
+      if (!email || !password || !emailRegex.test(email) || containsMaliciousChars) {
+        alert("Datos inválidos. Verifica tu información.");
+        return;
+      }
 
       try {
         const loadingBtn = form.querySelector("button[type='submit']");
