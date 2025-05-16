@@ -1,108 +1,140 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Spinnaker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
-body {
+* {
   margin: 0;
-  font-family: 'IBM Plex Sans', sans-serif; 
-  background-image: url("../images/bgnubes.png"); 
-  background-size: cover;
-  background-position: center; 
-  background-repeat: no-repeat; 
-  height: 100vh; 
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; 
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  background-color: #f4f4f4;
   overflow: hidden;
   position: relative;
 }
 
-/* Container del registro */
-.register-container {
-  background-color: rgba(18, 18, 82, 0.9); 
-  background-image: url('../images/bgazul.jpg');
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
-  width: 100vw; 
-  height: 75%; 
-  padding: 40px;
-  border-radius: 15px;
-  text-align: center;
+/* Logos top-right */
+.top-right-logos {
   position: absolute;
-  top: 25%; 
-  left: 0; 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  top: 15px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
 }
 
+.logo-img {
+  height: 50px;
+  width: auto;
+}
 
-.register-title {
-  font-size: 1.8rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-  text-transform: uppercase;
+/* Contenedor principal (doble columna) */
+.register-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Columna izquierda con fondo animado */
+.register-left {
+  flex: 1;
+  background: url('../images/nubess.png') repeat-x top center;
+  animation: moverNubes 60s linear infinite;
+  background-size: cover;
   color: white;
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@keyframes moverNubes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Textos en izquierda */
+.welcome-title {
+  font-family: 'Lilita One', cursive;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.welcome-text {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.website-link {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffd700;
+  text-decoration: none;
+}
+
+.website-link:hover {
+  text-decoration: underline;
+}
+
+/* Columna derecha */
+.register-right {
+  flex: 1;
+  background-color: white;
+  padding: 60px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Título derecha */
+.register-title {
+  font-family: 'Lilita One', cursive;
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #304c91;
 }
 
 /* Formulario */
 .register-form {
+  width: 100%;
+  max-width: 350px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 15px;
 }
 
-/* Campos del registro */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  width: 100%;
-}
-
-
+/* Inputs */
 .register-input {
-  width: 60%; 
-  padding: 10px;
-  border-radius: 25px; 
-  border: none;
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  font-size: 16px;
   outline: none;
-  background-color: #f0f0f0;
   color: #333;
-  margin-bottom: 20px;
-  display: block; 
-  margin-left: auto;
-  margin-right: auto;
 }
 
-
+/* Botón */
 .register-button {
-  background-color: #f5d575;
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 25px; 
-  cursor: pointer;
+  background-color: #304c91;
+  color: white;
+  width: 100%;
+  padding: 12px;
   font-weight: bold;
-  text-transform: uppercase;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
   transition: background-color 0.3s ease;
-  width: 60%;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 18px;
+  text-transform: uppercase;
 }
 
 .register-button:hover {
-  background-color: #e6b800;
-}
-
-/* Fondo  */
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('img/bgnubes.png') no-repeat center/cover; /* Fondo extendido */
-  z-index: -1;
+  background-color: #22356b;
 }
