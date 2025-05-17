@@ -12,24 +12,26 @@ export class Register {
   }
 
   async handleSubmit(e) {
+    console.log("Submit detectado - preveniendo acción por defecto");
     e.preventDefault();
-
-    const nombre = document.getElementById("nombre").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    const contieneCaracteresMaliciosos = /[<>"'`]/.test(nombre + email + password);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!nombre || !email || !password || contieneCaracteresMaliciosos || !emailRegex.test(email)) {
-      alert("Datos inválidos. Verifica los campos.");
-      return;
-    }
-
+    
     try {
+      console.log("Obteniendo valores del formulario");
+      const nombre = document.getElementById("nombre").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      const contieneCaracteresMaliciosos = /[<>"'`]/.test(nombre + email + password);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!nombre || !email || !password || contieneCaracteresMaliciosos || !emailRegex.test(email)) {
+        alert("Datos inválidos. Verifica los campos.");
+        return;
+      }
       const response = await authService.register(nombre, email, password);
       alert("¡Registro exitoso!");
       window.location.href = "index.html";
+      
     } catch (err) {
       console.error("Error en el registro:", {
         message: err.message,

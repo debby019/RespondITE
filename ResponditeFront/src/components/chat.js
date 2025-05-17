@@ -91,7 +91,7 @@ export class ChatInterface {
             this.mensajes.push(userMsg);
             
             const response = await chatService.sendMessage(
-              this.nuevoMensaje, 
+              this.nuevoMensaje,
               this.chat_id
             );
             
@@ -120,6 +120,21 @@ export class ChatInterface {
           } catch (e) { console.error(e) }
         },
 
+        async Ayuda() {
+          try {
+            if (!this.chat_id) {
+              alert("Primero debes iniciar o seleccionar un chat.");
+              return;
+            }
+
+            await chatService.help(this.chat_id);
+            alert("Solicitud de ayuda enviada correctamente.");
+          } catch (error) {
+            console.error("Error al solicitar ayuda:", error);
+            alert("Ocurrió un error al enviar la solicitud de ayuda.");
+          }
+        },
+
         scrollToBottom() {
           this.$nextTick(() => {
             const chatContainer = document.getElementById("chat-mensajes");
@@ -128,7 +143,7 @@ export class ChatInterface {
             }
           });
         },
-
+        	
         adminInterfaz(){
           window.location.href = "VentanaAdmin.html";
         },

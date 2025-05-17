@@ -1,5 +1,6 @@
 import { authService } from '../services/authServices.js';
-
+  
+authService.logout();
 export class Login {
   constructor() {
     this.initLoginForm();
@@ -20,7 +21,7 @@ export class Login {
         alert("Datos inválidos. Verifica tu información.");
         return;
       }
-
+      
       try {
         const loadingBtn = form.querySelector("button[type='submit']");
         loadingBtn.disabled = true;
