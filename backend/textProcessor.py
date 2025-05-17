@@ -16,9 +16,10 @@ def get_text_from_url(url: str, filename: str):
 
     response = requests.get(url)
     if response.status_code == 200:
+        text = response.content.decode("utf-8")
         with open(local_path, "w", encoding="utf-8") as file:
-            file.write(response.text)
-        return response.text
+            file.write(text)
+        return text
     else:
         return f"Error: Could not retrieve {filename}"
 

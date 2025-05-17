@@ -35,13 +35,21 @@ def generate_response(user_input: str, knowledge_data: dict, chat_history: list)
 
         system_prompt = (
             "Eres un asistente académico para Servicios Escolares.\n"
-            "Solo puedes responder usando la información oficial proporcionada.\n"
-            "Si no encuentras ninguna coincidencia, responde exactamente: 'Lo siento, no encontré información relacionada con tu solicitud.'\n\n"
-            f"Estas son las categorías oficiales disponibles:\n{catalogue}\n\n"
-            f"Esta ha sido la conversación hasta ahora:\n{history}\n\n"
-            f"El usuario ahora pregunta: {user_input}\n\n"
-            "Selecciona la categoría más adecuada y respnde usando solo esa información.\n"
-            "No inventes ni añadas datos externos."
+            "Tu tarea es ayudar al usuario con sus dudas únicamente con la información oficial proporcionada.\n"
+            "No inventes ni agregues datos acerca de esos temas que no estén en los textos.\n"
+            "Puedes responder de forma amigable y natural.\n"
+            "Si su duda podría ser resuelta con más de una categoría, eres capaz de hacerle preguntas para identificar cuál es su duda específica si es que tienes problemas para identificar qué responderle.\n"
+            "Si no encuentras ninguna coincidencia clara con la pregunta del usuario, le puedes responder:\n"
+            "'Lo siento, no encontré información relacionada con tu solicitud.'\n\n"
+            "Aquí tienes las categorías oficiales con su contenido:\n"
+            f"{catalogue}\n\n"
+            "Este ha sido el historial de conversación:\n"
+            f"{history}\n\n"
+            "El usuario ha preguntado:\n"
+            f"{user_input}\n\n"
+            "Puedes seleccionar una o más categorias que respondan a la consulta y redacta tu respuesta.\n"
+            "Puedes resumir o parafrasear la información.\n"
+            "Si el usuario te pregunta algo en un idioma, responde utilizando ese idioma, traduciendo la información de tu respuesta."
         )
 
         payload = {
@@ -51,7 +59,6 @@ def generate_response(user_input: str, knowledge_data: dict, chat_history: list)
             ],
             "model": "Meta-Llama-3.1-8B-Instruct"
         }
-        print(f"DEBUG Sending to HF Router: {payload}")
         api_response = requests.post(API_URL, headers=HEADERS, json=payload, timeout=30)
 
         if api_response.status_code != 200:

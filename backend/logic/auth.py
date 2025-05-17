@@ -14,11 +14,8 @@ def crear_token(datos: dict):
     return token
 
 def verificar_token(token: str = Depends(oauth2_scheme)):
-    print(f"DEBUG: received token = {token}")  # TEMP
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print(f"DEBUG: decoded payload = {payload}")  # TEMP
         return payload
     except JWTError as e:
-        print(f"DEBUG: token decode failed: {str(e)}")  # TEMP
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
