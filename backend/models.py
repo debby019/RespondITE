@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 
 class UserCreate(BaseModel):
     nombre: str
@@ -30,4 +30,27 @@ class Message(BaseModel):
 
 class ChatRequestBody(BaseModel):
     usuario_id: str
-    
+
+class HelpRequest(BaseModel):
+    chat_id: str
+
+
+class Consulta(BaseModel):
+    consulta: str
+    informacion: str
+
+class ProcesoBase(BaseModel):
+    nombre: str
+    consultas: List[Consulta]
+
+class ProcesoCreate(ProcesoBase):
+    ...
+
+class ProcesoUpdate(ProcesoBase):
+    ...
+
+class ProcesoOut(ProcesoBase):
+    id_proceso: str
+
+    class Config:
+        from_attributes = True
