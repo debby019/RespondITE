@@ -15,5 +15,13 @@ def get_supabase() -> Client:
 
     return create_client(url, key)
 
+def get_admin_supabase() -> Client:
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+
+    if not url or not key:
+        raise ValueError("Faltan variables de entorno SUPABASE_URL o SUPABASE_SERVICE_ROLE_KEY")
+
+    return create_client(url, key)
 
 supabase = get_supabase()
