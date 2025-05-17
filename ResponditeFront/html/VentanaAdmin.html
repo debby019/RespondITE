@@ -45,7 +45,7 @@
       <img src="../images/logo.png" class="rounded-circle mb-3 d-block mx-auto" style="width: 80px; height:80px; object-fit:cover;">
       <h3 class="text-center">Usuarios sin respuesta</h3>
       <div class="position-absolute bottom-0 start-0 end-0 p-3">
-        <button class="btn btn-outline-light w-100">Cerrar sesión</button>
+        <button class="btn btn-outline-light w-100 " @click="logout()">Cerrar sesión</button>
       </div>
     </div>
   </div>
@@ -93,7 +93,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div class="modal fade" id="processModal" tabindex="-1" aria-labelledby="processModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content text-dark">
@@ -123,21 +122,95 @@
   </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  function updateDateTime() {
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('es-ES');
-    const timeStr = now.toLocaleTimeString('es-ES');
-    document.getElementById('datetime').textContent = `${dateStr} ${timeStr}`;
-  }
-  setInterval(updateDateTime, 1000);
-  updateDateTime();
-  document.body.classList.add('loaded');
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+    import { validateSession} from '../src/services/sessionValidator.js';
+    import { authService } from '../src/services/authServices.js';
+    import { fetchProcesos, createProceso, updateProceso, deleteProcesoYConsultas } from '../src/services/adminServices.js';
 
-<!-- Módulo Vue y lógica admin -->
-<script type="module" src="../src/components/admin.js"></script>
+    window.addEventListener("DOMContentLoaded", async () => {
+      const userData = await validateSession();
+      if (!userData || userData.role !== 'admin') {
+        window.location.href = "index.html";
+        return;
+      }
+      document.body.classList.add('loaded');
+    });
+
+    function updateDateTime() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('es-ES');
+      const timeStr = now.toLocaleTimeString('es-ES');
+      document.getElementById('datetime').textContent = `${dateStr} ${timeStr}`;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    createApp({
+      data() {
+        return {
+          procesos: [],
+          form: {
+            nombre: '',
+            consultas: [{ consulta: '', informacion: '' }]
+          },
+          currentEditIndex: null
+        };
+      },
+      computed: {
+        isEditing() {
+          return this.currentEditIndex !== null;
+        }
+      },
+      methods: {
+        async fetch() {
+          this.procesos = await fetchProcesos();
+        },
+        openModal() {
+          this.form = { nombre: '', consultas: [{ consulta: '', informacion: '' }] };
+          this.currentEditIndex = null;
+          new bootstrap.Modal(document.getElementById('processModal')).show();
+        },
+        editProceso(index) {
+          const p = this.procesos[index];
+          this.form = {
+            nombre: p.nombre,
+            consultas: p.consultas.map(c => ({ consulta: c.consulta, informacion: c.informacion }))
+          };
+          this.currentEditIndex = index;
+          new bootstrap.Modal(document.getElementById('processModal')).show();
+        },
+        async saveProceso() {
+          if (this.isEditing) {
+            const proceso = this.procesos[this.currentEditIndex];
+            await updateProceso(proceso.id_proceso, this.form);
+          } else {
+            await createProceso(this.form);
+          }
+          await this.fetch();
+          bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
+        },
+        async deleteProceso(index) {
+          const proceso = this.procesos[index];
+          await deleteProcesoYConsultas(proceso.id_proceso);
+          await this.fetch();
+        },
+        addConsulta() {
+          this.form.consultas.push({ consulta: '', informacion: '' });
+        },
+        removeConsulta(index) {
+          this.form.consultas.splice(index, 1);
+        },
+        logout() {
+          authService.logout();
+          window.location.href = "index.html";
+        }
+      },
+      mounted() {
+        this.fetch();
+      }
+    }).mount("#app");
+  </script>
 </body>
 </html>

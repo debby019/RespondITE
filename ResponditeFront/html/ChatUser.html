@@ -83,6 +83,19 @@
       cursor: pointer;
     }
 
+    .ayuda-btn{
+      background-color: #fcbaba;
+      color: #100f1d;
+      font-family: 'Lilita One', sans-serif;
+      font-size: 1rem;
+      padding: 12px 28px;
+      margin-left: 1%;
+      border: none;
+      border-radius: 50px;
+      box-shadow: 0 4px 12px rgb(14, 17, 44);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
     .enviar-btn:hover {
       background-color: #6979b2;
       transform: scale(1.05);
@@ -213,7 +226,6 @@
       </button>
       <ul class="dropdown-menu text-center shadow show-on-hover " style="background-color: #6e86ae; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-size: 16px; ">
         <li><a class="dropdown-item" style="text-align: center;" href="#" @click="cerrarSesion">Cerrar sesión</a></li>
-        <li><a class="dropdown-item" style="text-align: center;" href="#"> Ayuda</a></li>
       </ul>
     </div>
   </div>
@@ -248,6 +260,7 @@
       <button class="btn enviar-btn" @click="enviarMensaje">
         {{ enviando ? 'Enviando...' : 'Enviar' }}
       </button>
+      <button v-if="!esAdmin" class="btn ayuda-btn" @click="Ayuda">Ayuda</button>
     </div>
   </div>
 </div>
@@ -260,4 +273,3 @@
 
 </body>
 </html>
-
