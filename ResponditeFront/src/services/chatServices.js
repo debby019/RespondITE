@@ -18,10 +18,14 @@ export const chatService = {
   },
 
   
-async getUserChats() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  return api.post('/chats', { usuario_id: user.id }); 
-}
+  async getUserChats() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    return api.post('/chats', { usuario_id: user.id }); 
+  },
+
+  async help(chatId) {
+    return api.post("/chats/help", { chat_id: chatId });
+  }
 
 
 };

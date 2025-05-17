@@ -28,5 +28,13 @@ export const api = {
 
   post(endpoint, data) {
     return this.request("POST", endpoint, data);
+  },
+
+  put(endpoint, data) {
+    return this.request("PUT", endpoint, data);
+  },
+
+  delete(endpoint) {
+    return this.request("DELETE", endpoint);
   }
 };
