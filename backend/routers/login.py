@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from backend.models import UserCreate, UserLogin, RegisterResponse
+from backend.models import *
 from backend.logic.user import get_user_by_email, create_user, verify_password
 from backend.logic.auth import crear_token
 
@@ -38,3 +38,4 @@ async def login_user(user: UserLogin):
         "usuario_id": db_user["id_usuario"],
         "role": db_user["rol"],
     }
+

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from backend.logic.user import  get_chats_by_user_id
 from backend.logic.auth import verificar_token
-from backend.models import ChatRequest, ChatRequestBody
-from backend.logic.chat import save_user_message, generate_ai_response, get_chat_history_by_chat_id, create_chat
+from backend.models import *
+from backend.logic.chat import *
 router = APIRouter()
 
 @router.post("/chat")
@@ -40,3 +40,9 @@ def obtener_chats_usuario(request: ChatRequestBody):
         raise HTTPException(status_code=400, detail="Falta el usuario_id")
     
     return get_chats_by_user_id(request.usuario_id)
+
+
+@router.post("/chats/help")
+def solicitar_ayuda(request: HelpRequest):
+    help_data = insert_help(request.chat_id)
+    return {"mensaje": "Solicitud de ayuda registrada", "data": help_data}
