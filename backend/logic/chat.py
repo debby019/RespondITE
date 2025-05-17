@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from backend.conexion.dataBase import supabase
 from backend.ai.aiEngine import handle_user_input
+from backend.models import *
 
 def save_user_message(chat_id: str, mensaje: str):
     result = supabase.table("mensaje").insert({
@@ -35,3 +36,9 @@ def create_chat(user_id: str):
         raise HTTPException(status_code=500, detail="Error al crear un nuevo chat.")
     return new_chat.data[0]["id_chat"]
 
+def insert_help(chat_id: str):
+    new_help = supabase.table("help_request").insert({"chat_id": chat_id,
+                                                      "estado": "pendiente"}).execute()
+    if not new_help.data:
+        raise HTTPException(status_code=500, detail="Error al guardar la solicitud de ayuda.")
+    return new_help.data[0]

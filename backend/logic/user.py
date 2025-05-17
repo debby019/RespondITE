@@ -3,6 +3,7 @@ from passlib.hash import bcrypt
 from backend.conexion.dataBase import supabase
 from backend.models import UserCreate
 
+
 def get_user_by_email(email: str):
     result = supabase.table("usuarios").select("*").eq("email", email).execute()
     return result.data[0] if result.data else None
@@ -33,3 +34,8 @@ def get_chats_by_user_id(user_id: str):
         print("no funciono")
         return []
     return result.data
+
+def delete_user(user_id: str):
+
+    supabase.table("usuario").delete().eq("id_usuario", user_id).execute()
+    
