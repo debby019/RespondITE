@@ -5,7 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RespondITE</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Fuente igual que el primer archivo -->
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+
+    /* Fondo y animación igual que primer archivo */
+   html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; /* para permitir scroll vertical */
+  font-family: 'Lilita One', sans-serif;
+}
+
+   body {
+  background: url('../images/nubess.png') repeat-x center center;
+  background-size: cover;
+  animation: moverNubes 60s linear infinite;
+}
+
+@keyframes moverNubes {
+  0% {
+    background-position: 0 center;
+  }
+  100% {
+    background-position: 10000px center;
+  }
+}
+
+    .barra-nubes {
+      background-color: #1a3767;
+      background-size: cover;
+      animation: moverNubes 60s linear infinite;
+      height: 100px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1050;
+    }
+
+    @keyframes moverNubes {
+      0% { background-position: 0 0; }
+      100% { background-position: 1000px 0; }
+    }
+
+    /* Mantengo el estilo body opacity para el fade-in */
     body {
       opacity: 0;
       transition: opacity 1.5s ease-in;
@@ -13,6 +59,13 @@
     body.loaded {
       opacity: 1;
     }
+
+    /* Para que el contenido quede debajo de la barra-nubes */
+    #app {
+      padding-top: 100px;
+    }
+
+    /* Conserva estilo datetime pero ajustado para verse sobre fondo oscuro */
     .datetime {
       position: absolute;
       top: 10px;
@@ -20,24 +73,33 @@
       color: white;
       font-weight: bold;
       font-size: 1rem;
-      z-index: 1050;
+      z-index: 1100;
       text-shadow: 1px 1px 4px #000;
+      font-family: 'Lilita One', sans-serif;
     }
   </style>
 </head>
-<body class="vh-100" style="background: url('../images/bgnubes.png') no-repeat center/cover;">
+<body class="vh-100" >
+
+  <!-- Agrego barra-nubes igual que el primer archivo -->
+  <div class="barra-nubes d-flex justify-content-center align-items-center gap-2">
+    <img src="../images/logo_transparente.png" alt="RespondITE Logo" style="width: 50px; height: 50px; object-fit: cover;">
+    <span style="font-family: 'Lilita One', sans-serif; font-size: 24px; color: white;">
+      Respond<span style="color: #e7d162;">ITE</span>
+    </span>
+  </div>
 
 <div id="app">
   <div class="datetime" id="datetime"></div>
 
-  <div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-3">
+  <div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-3" style="z-index: 1100;">
     <button class="btn btn-light" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
-    <h4 class="text-white m-0 fw-bold fst-italic" style="text-shadow: 1px 1px 4px #000; font-family: 'Georgia', serif;">
+    <h4 class="text-white m-0 fw-bold fst-italic" style="text-shadow: 1px 1px 4px #000; font-family: 'Lilita One', sans-serif;">
       Respond<span class="text-warning">ITE</span>
     </h4>
   </div>
 
-  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69);">
+  <div class="offcanvas offcanvas-start text-white" tabindex="-1" id="sidebar" style="background-color:rgb(33, 33, 69); z-index: 1100;">
     <div class="offcanvas-header">
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
@@ -50,11 +112,6 @@
     </div>
   </div>
 
-  <div class="w-100 py-3" style="background-color: #001f3f;">
-    <div class="d-flex justify-content-center">
-      <img src="../images/logo.png" alt="RespondITE Logo" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
-    </div>
-  </div>
 
   <div class="container py-4 text-black text-center">
     <h2 class="fw-bold mb-4">INFORMACIÓN PARA LA BASE DE DATOS</h2>
@@ -122,95 +179,95 @@
   </div>
 </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module">
-    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
-    import { validateSession} from '../src/services/sessionValidator.js';
-    import { authService } from '../src/services/authServices.js';
-    import { fetchProcesos, createProceso, updateProceso, deleteProcesoYConsultas } from '../src/services/adminServices.js';
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+  import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+  import { validateSession} from '../src/services/sessionValidator.js';
+  import { authService } from '../src/services/authServices.js';
+  import { fetchProcesos, createProceso, updateProceso, deleteProcesoYConsultas } from '../src/services/adminServices.js';
 
-    window.addEventListener("DOMContentLoaded", async () => {
-      const userData = await validateSession();
-      if (!userData || userData.role !== 'admin') {
-        window.location.href = "index.html";
-        return;
-      }
-      document.body.classList.add('loaded');
-    });
-
-    function updateDateTime() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('es-ES');
-      const timeStr = now.toLocaleTimeString('es-ES');
-      document.getElementById('datetime').textContent = `${dateStr} ${timeStr}`;
+  window.addEventListener("DOMContentLoaded", async () => {
+    const userData = await validateSession();
+    if (!userData || userData.role !== 'admin') {
+      window.location.href = "index.html";
+      return;
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    document.body.classList.add('loaded');
+  });
 
-    createApp({
-      data() {
-        return {
-          procesos: [],
-          form: {
-            nombre: '',
-            consultas: [{ consulta: '', informacion: '' }]
-          },
-          currentEditIndex: null
-        };
-      },
-      computed: {
-        isEditing() {
-          return this.currentEditIndex !== null;
-        }
-      },
-      methods: {
-        async fetch() {
-          this.procesos = await fetchProcesos();
+  function updateDateTime() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('es-ES');
+    const timeStr = now.toLocaleTimeString('es-ES');
+    document.getElementById('datetime').textContent = `${dateStr} ${timeStr}`;
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  createApp({
+    data() {
+      return {
+        procesos: [],
+        form: {
+          nombre: '',
+          consultas: [{ consulta: '', informacion: '' }]
         },
-        openModal() {
-          this.form = { nombre: '', consultas: [{ consulta: '', informacion: '' }] };
-          this.currentEditIndex = null;
-          new bootstrap.Modal(document.getElementById('processModal')).show();
-        },
-        editProceso(index) {
-          const p = this.procesos[index];
-          this.form = {
-            nombre: p.nombre,
-            consultas: p.consultas.map(c => ({ consulta: c.consulta, informacion: c.informacion }))
-          };
-          this.currentEditIndex = index;
-          new bootstrap.Modal(document.getElementById('processModal')).show();
-        },
-        async saveProceso() {
-          if (this.isEditing) {
-            const proceso = this.procesos[this.currentEditIndex];
-            await updateProceso(proceso.id_proceso, this.form);
-          } else {
-            await createProceso(this.form);
-          }
-          await this.fetch();
-          bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
-        },
-        async deleteProceso(index) {
-          const proceso = this.procesos[index];
-          await deleteProcesoYConsultas(proceso.id_proceso);
-          await this.fetch();
-        },
-        addConsulta() {
-          this.form.consultas.push({ consulta: '', informacion: '' });
-        },
-        removeConsulta(index) {
-          this.form.consultas.splice(index, 1);
-        },
-        logout() {
-          authService.logout();
-          window.location.href = "index.html";
-        }
-      },
-      mounted() {
-        this.fetch();
+        currentEditIndex: null
+      };
+    },
+    computed: {
+      isEditing() {
+        return this.currentEditIndex !== null;
       }
-    }).mount("#app");
-  </script>
+    },
+    methods: {
+      async fetch() {
+        this.procesos = await fetchProcesos();
+      },
+      openModal() {
+        this.form = { nombre: '', consultas: [{ consulta: '', informacion: '' }] };
+        this.currentEditIndex = null;
+        new bootstrap.Modal(document.getElementById('processModal')).show();
+      },
+      editProceso(index) {
+        const p = this.procesos[index];
+        this.form = {
+          nombre: p.nombre,
+          consultas: p.consultas.map(c => ({ consulta: c.consulta, informacion: c.informacion }))
+        };
+        this.currentEditIndex = index;
+        new bootstrap.Modal(document.getElementById('processModal')).show();
+      },
+      async saveProceso() {
+        if (this.isEditing) {
+          const proceso = this.procesos[this.currentEditIndex];
+          await updateProceso(proceso.id_proceso, this.form);
+        } else {
+          await createProceso(this.form);
+        }
+        await this.fetch();
+        bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
+      },
+      async deleteProceso(index) {
+        const proceso = this.procesos[index];
+        await deleteProcesoYConsultas(proceso.id_proceso);
+        await this.fetch();
+      },
+      addConsulta() {
+        this.form.consultas.push({ consulta: '', informacion: '' });
+      },
+      removeConsulta(index) {
+        this.form.consultas.splice(index, 1);
+      },
+      logout() {
+        authService.logout();
+        window.location.href = "index.html";
+      }
+    },
+    mounted() {
+      this.fetch();
+    }
+  }).mount("#app");
+</script>
 </body>
 </html>
