@@ -260,7 +260,11 @@
       <button class="btn enviar-btn" @click="enviarMensaje">
         {{ enviando ? 'Enviando...' : 'Enviar' }}
       </button>
-      <button v-if="!esAdmin" class="btn ayuda-btn" @click="Ayuda">Ayuda</button>
+       <a v-if="!esAdmin" class="btn ayuda-btn text-decoration-none" 
+   :href="'mailto:escolares@ite.edu.mx?subject=Solicitud de ayuda&body=Hola, necesito ayuda con...'" 
+   target="_blank">
+  Ayuda
+</a>
     </div>
   </div>
 </div>
