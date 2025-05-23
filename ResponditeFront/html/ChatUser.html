@@ -23,8 +23,7 @@
     body {
       background: url('../images/nubess.png') repeat-x;
       animation: moverNubes 60s linear infinite;
-      
-       background-position: top;
+      background-position: top;
       background-size: cover;      
       background-position: top; 
       
@@ -192,7 +191,7 @@
     
     <div class="offcanvas-body d-flex flex-column justify-content-between px-3">
       <div>
-        <button class="btn  w-100 mb-3 fw-bold shadow-sm text-white" style="border-radius: 10px; background-color:#425b83" @click="nuevoChat">
+        <button v-if="!esInvitado" class="btn  w-100 mb-3 fw-bold shadow-sm text-white" style="border-radius: 10px; background-color:#425b83" @click="nuevoChat">
           <i class="bi  me-2"></i>Nuevo chat
         </button>
   
@@ -200,7 +199,7 @@
           <i class="bi bi-shield-lock me-2"></i>Admin
         </button>
   
-        <div id="chat-historial" class="list-group shadow-sm" style="max-height: 55vh; overflow-y: auto;">
+        <div v-if="!esInvitado" id="chat-historial" class="list-group shadow-sm" style="max-height: 55vh; overflow-y: auto;">
           <button 
             v-for="chat in chats" 
             :key="chat.id" 
