@@ -15,17 +15,21 @@ window.addEventListener("DOMContentLoaded", () => {
 export class ChatInterface {
   constructor() {
     if (!authService.isAuthenticated()) {
-      window.location.href = "index.html";
-      return;
+      const token = localStorage.getItem("token");
+      if (token !== "guest-token") {
+        window.location.href = "index.html";
+        return;
+      }
     }
 
     this.currentUser = authService.getCurrentUser();
 
-    if (!this.currentUser?.id) {
-      authService.logout();
-      window.location.href = "index.html";
-      return;
-    } 
+  if (!this.currentUser?.id && this.currentUser?.id !== "guest") {
+    authService.logout();
+    window.location.href = "index.html";
+    return;
+  }
+
 
     const vueData = {
       fecha: new Date().toLocaleDateString('es-MX', { 
@@ -40,6 +44,7 @@ export class ChatInterface {
       chat_id: null, 
       enviando: false,
       usuario_id: this.currentUser.id,
+      esInvitado: this.currentUser.role === 'guest',
       esAdmin: this.currentUser.role === 'admin',
     };
 
@@ -148,8 +153,24 @@ export class ChatInterface {
           window.location.href = "VentanaAdmin.html";
         },
         cerrarSesion() {
-          authService.logout();
-          window.location.href = "index.html";
+
+          // Si es invitado, eliminar usuario.
+          if (this.esInvitado) {
+            authService.delete()
+              .then(() => {
+                console.log("Usuario invitado eliminado");
+              })
+              .catch(err => {
+                console.warn("Error al eliminar usuario invitado:", err);
+              })
+              .finally(() => {
+                authService.logout();
+                window.location.href = "index.html";
+              });
+          } else {
+            authService.logout();
+            window.location.href = "index.html";
+          }
         }
       },
       mounted() {

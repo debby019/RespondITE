@@ -1,6 +1,36 @@
 import { authService } from '../services/authServices.js';
-  
+
 authService.logout();
+
+
+export async function Invitado() {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/auth/guest", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("No se pudo iniciar sesión como invitado.");
+    }
+
+    const data = await response.json();
+
+    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("user", JSON.stringify({
+      id: data.user_id,
+      role: "guest",
+      chat_id: null
+    }));
+
+    window.location.href = "chatUser.html";
+  } catch (error) {
+    alert("Error al ingresar como invitado: " + error.message);
+  }
+}
+
 export class Login {
   constructor() {
     this.initLoginForm();
@@ -39,4 +69,6 @@ export class Login {
       }
     });
   }
+
+
 }
