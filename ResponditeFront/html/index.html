@@ -44,9 +44,9 @@
             ¿No tienes una cuenta? <a href="register.html" class="register-link">Regístrate</a>
           </p>
 
-          <button type="button" class="btn access-btn mt-3" onclick="window.location.href='ChatUser.html'">
+           <button type="button" class="btn access-btn mt-3" id="btnInvitado">
             Acceder sin cuenta
-          </button>
+          </button> 
         </form>
       </div>
     </div>
@@ -55,6 +55,7 @@
   <script type="module">
     import { Login } from '../src/components/login.js';
     new Login();
+    document.getElementById("btnInvitado").addEventListener("click", Invitado);
   </script>
 </body>
 </html>
