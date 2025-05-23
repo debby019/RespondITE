@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from backend.models import *
-from backend.logic.user import get_user_by_email, create_user, verify_password
-from backend.logic.auth import crear_token
+from backend.logic.user import *
+from backend.logic.auth import *
 
 router = APIRouter()
 
@@ -39,3 +40,22 @@ async def login_user(user: UserLogin):
         "role": db_user["rol"],
     }
 
+@router.post("/auth/guest")
+def login_guest():
+    guest_user_id = create_guest_user()
+    token = crear_token({"sub": guest_user_id, "role": "guest"})
+    return JSONResponse(content={
+        "access_token": token,
+        "token_type": "bearer",
+        "user_id": guest_user_id
+    })
+
+
+@router.post("/delete")
+def eliminar_usuario(token_data=Depends(verificar_token)):
+    role = token_data.get("role")
+    user_id = token_data.get("sub")
+    if role == "guest" and user_id:
+        delete_user(user_id)
+        return {"mensaje": f"Usuario invitado {user_id} eliminado."}
+    return {"mensaje":"usuario eliminado"}

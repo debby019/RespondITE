@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from backend.logic.user import  get_chats_by_user_id
+from backend.logic.user import  get_chats_by_user_id, create_guest_user
 from backend.logic.auth import verificar_token
 from backend.models import *
 from backend.logic.chat import *
@@ -8,6 +8,7 @@ router = APIRouter()
 @router.post("/chat")
 def chat_endpoint(request: ChatRequest, token_data=Depends(verificar_token)):
     user_id = token_data.get("sub")
+    
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido: falta ID de usuario")
 
@@ -23,8 +24,14 @@ def chat_endpoint(request: ChatRequest, token_data=Depends(verificar_token)):
 @router.post("/chats/nuevo")
 def crear_nuevo_chat(token_data=Depends(verificar_token)):
     user_id = token_data.get("sub")
+    role = token_data.get("role")
+    if role == "guest" and (not user_id or user_id == "guest"):
+        existing_chat = supabase.table("chat").select("id_chat").eq("id_usuario", user_id).limit(1).execute()
+        if existing_chat.data:
+            return {"id_chat": existing_chat.data[0]["id_chat"]}
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido")
+    
     new_id = create_chat(user_id)
     return {"id_chat": new_id}
 
