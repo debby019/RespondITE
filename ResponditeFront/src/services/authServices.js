@@ -27,6 +27,10 @@ export const authService = {
     }
   },
 
+  async delete() {
+    return api.post("/delete");
+  },
+
   logout() {
     try {
 
