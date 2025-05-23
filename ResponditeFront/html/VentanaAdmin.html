@@ -37,12 +37,28 @@
       background-color: #1a3767;
       background-size: cover;
       animation: moverNubes 60s linear infinite;
-      height: 100px;
+      height: 60px; 
       border-bottom: 2px solid rgba(0, 0, 0, 0.1);
       position: fixed;
       top: 0;
       width: 100%;
-      z-index: 1050;
+      z-index: 1040;
+      padding: 0 20px;
+      display: flex !important;
+      align-items: center;
+    }
+
+ 
+    .barra-nubes img {
+      width: 40px !important;
+      height: 40px !important;
+      object-fit: cover;
+    }
+
+    .barra-nubes span {
+      font-family: 'Lilita One', sans-serif;
+      font-size: 1.5rem !important;
+      color: white;
     }
 
     @keyframes moverNubes {
@@ -61,20 +77,46 @@
 
     
     #app {
-      padding-top: 100px;
+      padding-top: 70px; 
     }
 
     
     .datetime {
-      position: absolute;
-      top: 10px;
+      position: fixed !important; 
+      top: 70px; 
       right: 20px;
       color: white;
       font-weight: bold;
       font-size: 1rem;
-      z-index: 1100;
+      z-index: 1045; 
       text-shadow: 1px 1px 4px #000;
       font-family: 'Lilita One', sans-serif;
+    }
+
+  
+    .d-flex.justify-content-center.gap-4.mb-4.flex-wrap button.btn {
+      white-space: normal;
+      line-height: 1.2;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      min-width: 120px;
+      word-break: break-word;
+    }
+
+
+    .modal-header h5.modal-title {
+      white-space: normal;
+      word-break: break-word;
+    }
+    .modal {
+     z-index: 1060 !important;
+    }
+
+    @media (max-width: 576px) {
+      .modal-dialog {
+        max-width: 95%;
+        margin: 1.75rem auto;
+      }
     }
   </style>
 </head>
@@ -91,10 +133,9 @@
 <div id="app">
   <div class="datetime" id="datetime"></div>
 
-  <div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-3" style="z-index: 1100;">
+  <div class="position-absolute top-0 start-0 m-3 d-flex align-items-center gap-3" style="z-index: 1045;">
     <button class="btn btn-light" data-bs-toggle="offcanvas" data-bs-target="#sidebar">☰</button>
-    <h4 class="text-white m-0 fw-bold fst-italic" style="text-shadow: 1px 1px 4px #000; font-family: 'Lilita One', sans-serif;">
-      Respond<span class="text-warning">ITE</span>
+    
     </h4>
   </div>
 
