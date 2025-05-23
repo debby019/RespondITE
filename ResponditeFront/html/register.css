@@ -10,11 +10,10 @@ body, html {
   height: 100%;
   font-family: 'IBM Plex Sans', sans-serif;
   background-color: #f4f4f4;
-  overflow: hidden;
-  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* Logos top-right */
 .top-right-logos {
   position: absolute;
   top: 15px;
@@ -29,13 +28,11 @@ body, html {
   width: auto;
 }
 
-/* Contenedor principal (doble columna) */
 .register-wrapper {
   display: flex;
   min-height: 100vh;
 }
 
-/* Columna izquierda con fondo animado */
 .register-left {
   flex: 1;
   background: url('../images/nubess.png') repeat-x top center;
@@ -58,7 +55,6 @@ body, html {
   }
 }
 
-/* Textos en izquierda */
 .welcome-title {
   font-family: 'Lilita One', cursive;
   font-size: 36px;
@@ -81,7 +77,6 @@ body, html {
   text-decoration: underline;
 }
 
-/* Columna derecha */
 .register-right {
   flex: 1;
   background-color: white;
@@ -92,7 +87,6 @@ body, html {
   flex-direction: column;
 }
 
-/* Título derecha */
 .register-title {
   font-family: 'Lilita One', cursive;
   font-size: 36px;
@@ -100,7 +94,6 @@ body, html {
   color: #304c91;
 }
 
-/* Formulario */
 .register-form {
   width: 100%;
   max-width: 350px;
@@ -109,7 +102,6 @@ body, html {
   gap: 15px;
 }
 
-/* Inputs */
 .register-input {
   width: 100%;
   padding: 12px 15px;
@@ -120,7 +112,6 @@ body, html {
   color: #333;
 }
 
-/* Botón */
 .register-button {
   background-color: #304c91;
   color: white;
@@ -137,4 +128,38 @@ body, html {
 
 .register-button:hover {
   background-color: #22356b;
+}
+
+@media (max-width: 768px), (max-height: 600px) {
+  .register-wrapper {
+    flex-direction: column;
+    align-items: center;
+    min-height: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .register-left {
+    display: none !important;
+  }
+
+  .register-right {
+    width: 100% !important;
+    flex: 1 1 100%;
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+
+  .top-right-logos {
+    justify-content: center;
+    position: static;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .register-form {
+    max-width: 90%;
+  }
 }
