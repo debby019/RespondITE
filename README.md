@@ -105,6 +105,26 @@ Si la ejecución fue exitosa, deberías ver algo como lo siguiente:<br/>
 Una vez que el servidor esté corriendo, abre el archivo index.html, ubicado en la carpeta ResponditeFront/html, en tu navegador.<br/>
 ![index](https://github.com/debby019/RespondITE/blob/ba4ab87f3263b444f53e4fbbc5f4cc6b18b347dd/Img/index.png)<br/>
 
+
+**Alternativa:**
+<br/>
+Otra forma de correr el servidor es:
+Abrir una terminal y dirigirse a la carpeta principal del proyecto. Luego ejecutar el backend con el siguiente comando:
+````
+py -m backend.main
+````
+![Ejecucion back](https://github.com/debby019/RespondITE/blob/4482d212dfbd30b41ed56ac0830b47272625c2f1/Img/servidorBackend.png)<br/>
+Posteriormente abrir una segunda terminal en la misma carpeta principal del proyecto y ejecutar el siguiente comando para iniciar un servidor local que sirva los archivos HTML:
+````
+py -m http.server 8000
+````
+![Ejecucion html](https://github.com/debby019/RespondITE/blob/4482d212dfbd30b41ed56ac0830b47272625c2f1/Img/servidorpython.png)<br/>
+
+Una vez hecho esto, podras ingresar al sitio desde la siguiente dirección en tu navegador:
+```` 
+http://localhost:8000/ResponditeFront/html/index.html
+````
+
 ### Base de Datos
 La base de datos está alojada en Supabase, por lo que no es necesario importar ningún script SQL en un gestor local.  
 El archivo `database_postgresql.sql` (ubicado en la raíz del proyecto) contiene las sentencias SQL usadas para crear las tablas, pero se incluye únicamente como referencia.  
