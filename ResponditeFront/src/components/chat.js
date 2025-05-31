@@ -3,6 +3,8 @@ import { authService } from '../services/authServices.js';
 import { validateSession } from '../services/sessionValidator.js';
 
 window.addEventListener("DOMContentLoaded", () => {
+
+    // Validar que haya una sesión activa y obtener datos del usuario
   const userData = validateSession();
 
   if (!userData) return;
@@ -14,6 +16,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 export class ChatInterface {
   constructor() {
+    // Verificar que el usuario este autenticado o que haya ingresado como invitado.
     if (!authService.isAuthenticated()) {
       const token = localStorage.getItem("token");
       if (token !== "guest-token") {
@@ -30,7 +33,7 @@ export class ChatInterface {
     return;
   }
 
-
+  // Datos iniciales para la aplicación Vue
     const vueData = {
       fecha: new Date().toLocaleDateString('es-MX', { 
         day: '2-digit', 
@@ -38,14 +41,14 @@ export class ChatInterface {
         year: 'numeric' 
       }),
       nuevoMensaje: '',
-      mensajes: [],
-      chats: [],
+      mensajes: [], // Historial de mensajes del chat actual
+      chats: [],   // Lista de chats del usuario
       chatSeleccionado: null,
       chat_id: null, 
       enviando: false,
-      usuario_id: this.currentUser.id,
-      esInvitado: this.currentUser.role === 'guest',
-      esAdmin: this.currentUser.role === 'admin',
+      usuario_id: this.currentUser.id, // Usuario estudiante/comun.
+      esInvitado: this.currentUser.role === 'guest', // Usuario invitado.
+      esAdmin: this.currentUser.role === 'admin', // Usuario administrador
     };
 
     this.initVueApp(vueData);
@@ -57,6 +60,7 @@ export class ChatInterface {
         return initialData; 
       },
       methods: {
+        // Carga la lista de chats del usuario.
         async cargarHistorialChats() {
           try {
             const historial = await chatService.getUserChats();
@@ -72,6 +76,7 @@ export class ChatInterface {
           await this.cargarMensajes();
         },
 
+        // Carga los mensajes de un chat específico
         async cargarMensajes() {
           if (!this.chat_id) return;
           try {
@@ -87,11 +92,22 @@ export class ChatInterface {
           }
         },
 
+      // Enviar un mensaje escrito por el usuario.
         async enviarMensaje() {
           if (!this.nuevoMensaje.trim() || this.enviando) return;
 
           try {
             this.enviando = true;
+
+            // Si no hay un chat seleccionado crea uno nuevo.
+            if (!this.chat_id) {
+              const res = await chatService.createNewChat();
+              this.chat_id = res.id_chat;
+              this.chatSeleccionado = res.id_chat;
+              this.mensajes = [];
+              await this.cargarHistorialChats();
+            }
+
             const userMsg = { texto: this.nuevoMensaje, tipo: "usuario" };
             this.mensajes.push(userMsg);
             
@@ -170,7 +186,6 @@ export class ChatInterface {
       },
       mounted() {
         this.cargarHistorialChats();
-        this.nuevoChat();
       }
 
     });

@@ -5,6 +5,7 @@ authService.logout();
 
 export async function Invitado() {
   try {
+    //  token para usuario invitado al backend
     const response = await fetch("http://127.0.0.1:8000/auth/guest", {
       method: "POST",
       headers: {
@@ -44,6 +45,7 @@ export class Login {
       const email = form.querySelector("#email").value.trim();
       const password = form.querySelector("#password").value.trim();
 
+      // Validar formato del email y evitar caracteres maliciosos
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       const containsMaliciousChars = /<|>|'|"|;|--|\/\*/.test(email + password);
 
