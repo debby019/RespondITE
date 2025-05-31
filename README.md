@@ -38,25 +38,41 @@ En la terminal, dentro de la carpeta backend, instala las siguientes dependencia
 ````
 pip install fastapi
 ````
-2. Uvicorn (servidor ASGI para correr FastAPI)
+2. supabase-py
+````
+pip install supabase
+````
+3. Uvicorn (servidor ASGI para correr FastAPI)
 ````
 pip install uvicorn
 ````
-3. bcrypt 3.2.2 (cifrado de contraseñas)
+4. bcrypt 3.2.2 (cifrado de contraseñas)
 ````
 pip install bcrypt==3.2.2
 ````
-4. passlib 
+5. passlib 
 ````
 pip install passlib
 ````
-5. python-multipart (para manejar datos tipo formulario)
+6. python-multipart (para manejar datos tipo formulario)
 ````
 pip install python-multipart
 ````
-6. python-jose[cryptography] (JWT)
+7. python-jose[cryptography] (JWT)
 ````
 pip install python-jose[cryptography]
+````
+8. python-dotenv
+````
+pip install python-dotenv
+````
+9. pydantic
+````
+pip install pydantic
+````
+10. pip install requests
+````
+pip install requests
 ````
 
 ### EJEMPLO:
@@ -65,12 +81,13 @@ pip install python-jose[cryptography]
 ### Archivo .env
 Dentro de la carpeta **principal**, crea un archivo llamado .env con las siguientes claves
 ````
-API_URL="api_url"
-API_KEY="api_key"
+API_URL="url_ejemplo" 
+API_KEY="key_ejemplo"
 
 SUPABASE_URL="https://nulsoiwjscvaxzxyjfgm.supabase.co"
 SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bHNvaXdqc2N2YXh6eHlqZmdtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0NDgzMzcsImV4cCI6MjA1ODAyNDMzN30.WeWkC1Migmn8QKYI3XjvQ0CEnHo4eizH5_XImTvHfzw"
 SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51bHNvaXdqc2N2YXh6eHlqZmdtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0MjQ0ODMzNywiZXhwIjoyMDU4MDI0MzM3fQ.E74aXQZ8YJAIuWmt-5S7TmvlH6Qa5Pfwl20GiLzJ9oM"
+
 SECRET_KEY="YGT1ayDJVyrsuLzFq-AY8P7iTJAGgMw584xA4rYPJ24"
 ALGORITHM="HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES=120
