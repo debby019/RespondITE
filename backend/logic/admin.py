@@ -12,6 +12,7 @@ supabase = get_admin_supabase()
 def normalizar_nombre(nombre: str) -> str:
     return re.sub(r'\W+', '_', nombre.strip().lower())
 
+# Extrae el "project_ref" de la URL de Supabase
 def get_project_ref(supabase_url: str) -> str:
     parsed_url = urlparse(supabase_url)
     project_ref = parsed_url.netloc.split('.')[0]
@@ -20,6 +21,7 @@ def get_project_ref(supabase_url: str) -> str:
 def generar_nombre_archivo(consulta: str) -> str:
     return f"{consulta[:20].replace(' ', '_')}.txt"
 
+# Elimina archivo cache local si existe
 def eliminar_archivo_cache(nombre_archivo: str):
     ruta_local = os.path.join("cache_texts", nombre_archivo)
     print(f"Intentando eliminar: {ruta_local}")
@@ -29,6 +31,7 @@ def eliminar_archivo_cache(nombre_archivo: str):
     else:
         print(f"Archivo NO encontrado: {ruta_local}")
 
+# Sube un archivo con contenido de texto plano a Supabase Storage en la carpeta especificada
 def subir_a_storage(carpeta: str, contenido: str, nombre_archivo: str) -> str:
     path = f"{carpeta}/{nombre_archivo}"
     try:
@@ -39,7 +42,7 @@ def subir_a_storage(carpeta: str, contenido: str, nombre_archivo: str) -> str:
 
         if not res:
             raise Exception("Error al subir archivo a Supabase Storage")
-
+        # Define una duración larga para el enlace firmado 
         tiempo = 60 * 60 * 24 * 365 * 200
         signed = supabase.storage.from_('procesos').create_signed_url(path, expires_in=tiempo)
 
@@ -52,6 +55,7 @@ def subir_a_storage(carpeta: str, contenido: str, nombre_archivo: str) -> str:
         print("Error al subir a Supabase Storage:", e)
         raise
 
+# Procesa la lista de consultas para almacenarlas en Storage
 def procesar_consultas_para_storage(consultas, proceso_id, carpeta_proceso):
     to_insert = []
     for c in consultas:
@@ -67,6 +71,7 @@ def procesar_consultas_para_storage(consultas, proceso_id, carpeta_proceso):
 
 # Funciones principales
 def listar_procesos():
+     # Obtiene los procesos y consultas desde Supabase
     procs = supabase.table("procesos").select("*").execute().data or []
     conocimientos = supabase.table("base_conocimiento").select("*").execute().data or []
 
@@ -90,6 +95,7 @@ def listar_procesos():
 
     return resultados
 
+# Crear un nuevo proceso junto con sus consultas asociadas
 def crear_proceso(payload: ProcesoCreate):
     res = supabase.table("procesos").insert({"nombre": payload.nombre}).execute()
     if not res.data:
@@ -110,7 +116,9 @@ def crear_proceso(payload: ProcesoCreate):
         "consultas": payload.consultas
     }
 
+# Actualiza un proceso y sus consultas
 def actualizar_proceso(id_proceso: str, payload: ProcesoUpdate):
+    # Obtiene las consultas actuales para eliminar la información guardada localmente.
     datos_actuales = supabase.table("base_conocimiento").select("consulta").eq("proceso_id", id_proceso).execute()
     if datos_actuales.data:
         for fila in datos_actuales.data:
@@ -123,9 +131,11 @@ def actualizar_proceso(id_proceso: str, payload: ProcesoUpdate):
     if not upd.data:
         raise HTTPException(status_code=500, detail="Error al actualizar proceso")
 
+     # Elimina las consultas antiguas de la base de conocimiento
     supabase.table("base_conocimiento").delete().eq("proceso_id", id_proceso).execute()
 
     carpeta_proceso = normalizar_nombre(payload.nombre)
+    # Inserta las consultas actualizadas 
     to_insert = procesar_consultas_para_storage(payload.consultas, id_proceso, carpeta_proceso)
     ins = supabase.table("base_conocimiento").insert(to_insert).execute()
 
