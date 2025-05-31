@@ -1,10 +1,9 @@
-// src/components/admin.js
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 import {
-  fetchProcesosYConsultas,
-  agregarProceso,
-  actualizarProceso,
-  eliminarProceso
+  fetchProcesos,
+  updateProceso,
+  createProceso,
+  deleteProcesoYConsultas
 } from '../services/adminServices.js';
 import { validateSession } from '../services/sessionValidator.js';
 
@@ -27,7 +26,7 @@ createApp({
   methods: {
     async cargarProcesos() {
       try {
-        this.procesos = await fetchProcesosYConsultas();
+        this.procesos = await fetchProcesos();
         console.log('Procesos cargados:', this.procesos);
       } catch (err) {
         console.error('Error al cargar procesos:', err);
@@ -57,12 +56,20 @@ createApp({
       try {
         if (this.isEditing) {
           const id = this.procesos[this.currentEditIndex].id_proceso;
-          await actualizarProceso(id, this.form.nombre, this.form.consultas);
+          await updateProceso(id, {
+            nombre: this.form.nombre,
+            consultas: this.form.consultas
+          });
         } else {
-          await agregarProceso(this.form.nombre, this.form.consultas);
+          await createProceso({
+            nombre: this.form.nombre,
+            consultas: this.form.consultas
+          });
+
         }
         bootstrap.Modal.getInstance(document.getElementById('processModal')).hide();
-        await this.cargarProcesos();
+        await this.cargarProcesos();  
+
       } catch (err) {
         console.error('Error al guardar proceso:', err);
         alert('Error al guardar proceso');
@@ -71,8 +78,9 @@ createApp({
     async deleteProceso(index) {
       try {
         const id = this.procesos[index].id_proceso;
-        await eliminarProceso(id);
-        await this.cargarProcesos();
+        await deleteProcesoYConsultas(id);
+        await this.cargarProcesos(); 
+
       } catch (err) {
         console.error('Error al eliminar proceso:', err);
         alert('Error al eliminar proceso');
@@ -83,7 +91,12 @@ createApp({
     },
     removeConsulta(index) {
       this.form.consultas.splice(index, 1);
+    },
+    logout() {
+      authService.logout();
+      window.location.href = "index.html";
     }
+
   },
   async mounted() {
     const userData = validateSession();
@@ -92,7 +105,9 @@ createApp({
       window.location.href = 'index.html';
     } else {
       console.log('Usuario autenticado:', userData);
-      await this.cargarProcesos();
+      await this.cargarProcesos();  
+      document.body.classList.add('loaded');
+
     }
   }
 }).mount('#app');

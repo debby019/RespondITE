@@ -159,11 +159,6 @@ export class ChatInterface {
             authService.delete()
               .then(() => {
                 console.log("Usuario invitado eliminado");
-              })
-              .catch(err => {
-                console.warn("Error al eliminar usuario invitado:", err);
-              })
-              .finally(() => {
                 authService.logout();
                 window.location.href = "index.html";
               });
