@@ -1,2 +1,0 @@
-Para realizar el pago de reposiciÃ³n, seguir estos pasos en el SIE: Iniciar sesiÃ³n con nÃºmero de control y contraseÃ±a. Ir a la secciÃ³n "Pago de servicios". Ingresar al "CatÃ¡logo de servicios". Seleccionar "ReposiciÃ³n de credencial" y agregarla. Regresar a la secciÃ³n "Pago de servicios" y elegir "ReposiciÃ³n de credencial" en la tabla de servicios. Seleccionar la opciÃ³n de imprimir el recibo o pagar en lÃ­nea. El costo de la reposiciÃ³n puede consultarse en el SIE.
-
