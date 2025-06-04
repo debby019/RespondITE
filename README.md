@@ -132,11 +132,11 @@ La conexión a Supabase se gestiona automáticamente a través de las credencial
 
 ## INTEGRANTES
 
-* Angel Gabriel Angulo Martinez
-* Devorah Alonso Hernandez
-* Coral Castillo Escareño
-* Cindy Geraldine Gaynor Zurita
-* Eduardo Isidro Zerega Navarro
+* Angel Gabriel Angulo Martinez (AngelNGL)
+* Devorah Alonso Hernandez (debby019)
+* Coral Castillo Escareño (CoralCastillo27)
+* Cindy Geraldine Gaynor Zurita (gaynor25)
+* Eduardo Isidro Zerega Navarro (MasherZN)
 
 
 ## DOCUMENTACIÓN DEL PROYECTO
