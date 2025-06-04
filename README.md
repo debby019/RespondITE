@@ -140,7 +140,7 @@ La conexión a Supabase se gestiona automáticamente a través de las credencial
 
 
 ## DOCUMENTACIÓN DEL PROYECTO
-* DOCUMENTACIÓN DE REQUISITOS: https://docs.google.com/document/d/10h7pLpEBXtmWTo4oB6SFLlp6qxqKaanPCsaNdrUysp4/edit?usp=sharing
-* DISEÑO DE SOFTWARE:  https://docs.google.com/document/d/1Ni4Il5Mt78Dfs0u8sqNUp94qgDhu4KBvLK2cK7gzpLs/edit?usp=sharing
-* MANUAL TÉCNICO:  https://docs.google.com/document/d/1xZq7Lhf_lKsX-uqdW2Vm9_qiPsQswDNf5PnkB9H4Uyo/edit?tab=t.0
-* MANUAL DE USUARIO:  https://docs.google.com/document/d/1HQe3x6ScGVsx00adY3QO4vtzWe2GkOsx/edit
+* DOCUMENTACIÓN DE REQUISITOS:<br/> https://github.com/debby019/RespondITE/blob/a0ca867e653c9cf86efbbe248d7daaeefb364307/Documentos/Requisitos.pdf
+* DISEÑO DE SOFTWARE:<br/>  https://github.com/debby019/RespondITE/blob/a0ca867e653c9cf86efbbe248d7daaeefb364307/Documentos/DISE%C3%91O%20DE%20SOFTWARE.pdf
+* MANUAL TÉCNICO:<br/> https://github.com/debby019/RespondITE/blob/a0ca867e653c9cf86efbbe248d7daaeefb364307/Documentos/Manual%20T%C3%A9cnico.pdf
+* MANUAL DE USUARIO:<br/>  https://github.com/debby019/RespondITE/blob/a0ca867e653c9cf86efbbe248d7daaeefb364307/Documentos/Manual%20de%20Usuario.docx.pdf
