@@ -139,8 +139,8 @@ La conexión a Supabase se gestiona automáticamente a través de las credencial
 * Eduardo Isidro Zerega Navarro
 
 
-## DOCUMENTACION DEL PROYECTO
-https://docs.google.com/document/d/10h7pLpEBXtmWTo4oB6SFLlp6qxqKaanPCsaNdrUysp4/edit?usp=sharing
-https://docs.google.com/document/d/1Ni4Il5Mt78Dfs0u8sqNUp94qgDhu4KBvLK2cK7gzpLs/edit?usp=sharing
-https://docs.google.com/document/d/1xZq7Lhf_lKsX-uqdW2Vm9_qiPsQswDNf5PnkB9H4Uyo/edit?tab=t.0
-https://docs.google.com/document/d/1HQe3x6ScGVsx00adY3QO4vtzWe2GkOsx/edit
+## DOCUMENTACIÓN DEL PROYECTO
+* DOCUMENTACIÓN DE REQUISITOS: https://docs.google.com/document/d/10h7pLpEBXtmWTo4oB6SFLlp6qxqKaanPCsaNdrUysp4/edit?usp=sharing
+* DISEÑO DE SOFTWARE:  https://docs.google.com/document/d/1Ni4Il5Mt78Dfs0u8sqNUp94qgDhu4KBvLK2cK7gzpLs/edit?usp=sharing
+* MANUAL TÉCNICO:  https://docs.google.com/document/d/1xZq7Lhf_lKsX-uqdW2Vm9_qiPsQswDNf5PnkB9H4Uyo/edit?tab=t.0
+* MANUAL DE USUARIO:  https://docs.google.com/document/d/1HQe3x6ScGVsx00adY3QO4vtzWe2GkOsx/edit
